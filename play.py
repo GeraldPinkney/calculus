@@ -15,10 +15,11 @@ if __name__ == '__main__':
     round1 = Calculus.Round(9,deck, newGame._players)
     round1.deal()
     #round1.showHand()
-    #round1.getBets2()
-    #round1.show_bets()
+    round1.getBets()
+    round1.show_bets()
+
     round1.playTricks()
-    round1.show_actual()
+    #round1.show_actual()
 
 
 
