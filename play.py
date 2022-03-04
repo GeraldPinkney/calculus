@@ -5,20 +5,22 @@ import random
 
 if __name__ == '__main__':
     # Create deck, shuffle cards, get number of players
-    deck = Calculus.FrenchDeck()
-    deck.shuffle()
+    deck = Calculus.FrenchDeck('Y')
 
-    newGame = Calculus.Game(numOfPlayers=2)
+    newGame = Calculus.Game(deck=deck, numOfPlayers=2, numOfRounds=10)
     newGame.startGame()
 
-    # deal hands
-    round1 = Calculus.Round(9,deck, newGame._players)
-    round1.deal()
-    #round1.showHand()
-    round1.getBets()
-    round1.show_bets()
+    newGame.playRounds()
 
-    round1.playTricks()
+
+    # deal hands
+    #round1 = Calculus.Round(9,deck, newGame._players)
+    #round1.deal()
+    #round1.showHand()
+    #round1.getBets()
+    #round1.show_bets()
+
+    #round1.playTricks()
     #round1.show_actual()
 
 

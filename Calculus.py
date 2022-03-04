@@ -78,12 +78,13 @@ def valid_card(trumps, trumps_broken, player, card, *played):
     :return allowed:
     """
     allowed = False
+
     cards_played = played[0]
 
     card_rank, card_suit = card
     # you cannot lead with a trump unless trumps are broken or you only have trumps left
     if len(cards_played) == 0: # this means that you are leading
-        if trumps_broken==False: # this means you cannot play a trump
+        if not trumps_broken: # this means you cannot play a trump
             if card_suit != trumps: # if don't play trumps, its fine
                 allowed = True
             else: # if do play trumps, that must be all you have
@@ -98,14 +99,17 @@ def valid_card(trumps, trumps_broken, player, card, *played):
             allowed = True
     else:
         # you have to follow suit if you can
-        first_card = cards_played[0]
+        first_played = cards_played[0]
+        first_card = first_played[1]
         first_card_rank, first_card_suit = first_card
         if first_card_suit == card_suit:
+            # if you've followed suit then fine.
             allowed = True
         else:
             # check if the player has any of the first card's suit in their hand
             for card in player.hand:
                 v_card_rank, v_card_suit = card
+                # if there is a card in your hand that is the same as first card played
                 if v_card_suit == first_card_suit:
                     allowed = False
                     break
@@ -147,8 +151,8 @@ class FrenchDeck:
         # returns single card & burns it. DO NOT USE IF NOT SHUFFILED FIRST
         returned = self[-num:]
         self._burnt_cards.append(self[-num:])
-        del self._cards[-num]
-        return returned[0]
+        del self._cards[-num:]
+        return returned
 
     def shuffle(self):
         if len(self._cards) != 52:
@@ -161,6 +165,9 @@ class FrenchDeck:
                 self._cards[num] = self._cards[r]
                 self._cards[r] = tmp
             return 0
+
+    def __str__(self):
+        return f'Deck: ({self._cards})'
 
 
 class Hand:
@@ -237,6 +244,7 @@ class Game:
             for x in range(self._numOfPlayers):
                 playername = names[x]
                 self._players.append(Player(playername))
+        self.initRounds()
         return self._players
 
     def initRounds(self):
@@ -442,14 +450,14 @@ class Trick:
                 while (card_index < 0 or card_index > len(self.players[num].hand) and not v_valid_card) :
                     card_index = int(input(f'provide index of card, 0 to {len(self.players[num].hand) - 1}: '))
                     # check if choice is valid
-                    v_valid_card = valid_card(trumps=self._trumps[0], trumps_broken=g_trumps_broken, player=self.players[num],
-                                       card=self.players[num].hand._cards[card_index], *self._cards_played)
+                  #  if num == 0:
+                  #      v_valid_card = valid_card(self._trumps, g_trumps_broken, self.players[num], self.players[num].hand._cards[card_index], [])
+                   # else:
+                    v_valid_card = valid_card(self._trumps, g_trumps_broken, self.players[num], self.players[num].hand._cards[card_index], self._cards_played)
                 # print(f'player {self.players[num].name}. card played: {self.players[num].hand._cards[card_index]}')
 
                 # play card
                 self.playCard(self.players[num].name,self.players[num].hand.playcard(self.players[num].hand._cards[card_index]))
-
-
         else:
             temp_played = played
             for played in temp_played:

@@ -43,7 +43,7 @@ class CompareTestCase(unittest.TestCase):
         self.assertEqual(Calculus.Card(rank='A', suit='spades'),result)
 
 
-class TrickTestCase(unittest.TestCase):
+class PlayCardTestCase(unittest.TestCase):
     deck = Calculus.FrenchDeck()
     players = [Calculus.Player('Gerald'), Calculus.Player('Ruth'), Calculus.Player('Patrick')]
     for player in players:
@@ -71,21 +71,75 @@ class TrickTestCase(unittest.TestCase):
                 testTrick.playCard(player.name, player.hand.playcard(player.hand._cards[2]))
         self.assertEqual(testTrick._cards_played, [['Gerald', Calculus.Card(rank='2', suit='hearts')],['Ruth', Calculus.Card(rank='5', suit='spades')],['Patrick', Calculus.Card(rank='3', suit='hearts')]])
 
+
+class PlayTrickTestCase(unittest.TestCase):
+    deck = Calculus.FrenchDeck()
+    players = [Calculus.Player('Gerald'), Calculus.Player('Ruth'), Calculus.Player('Patrick')]
+    for player in players:
+        if player.name == 'Gerald':
+            player.hand.takecard(Calculus.Card(rank='A', suit='spades'))
+            player.hand.takecard(Calculus.Card(rank='2', suit='hearts'))
+            player.hand.takecard(Calculus.Card(rank='3', suit='spades'))
+        if player.name == 'Ruth':
+            player.hand.takecard(Calculus.Card(rank='4', suit='spades'))
+            player.hand.takecard(Calculus.Card(rank='5', suit='spades'))
+            player.hand.takecard(Calculus.Card(rank='A', suit='diamonds'))
+        if player.name == 'Patrick':
+            player.hand.takecard(Calculus.Card(rank='A', suit='hearts'))
+            player.hand.takecard(Calculus.Card(rank='2', suit='hearts'))
+            player.hand.takecard(Calculus.Card(rank='3', suit='hearts'))
+
     def testPlayTrick1(self):
         # g plays 1, R plays 1, P plays 2
         testTrick = Calculus.Trick('hearts',self.players)
+        print('g plays 1, R plays 1, P plays 2')
         testTrick.playTrick()
         print(testTrick._cards_played)
         self.assertEqual(testTrick.winner, 'Patrick')
 
 
-    def testPlayTrick2(self):
+class PlayTrickTestCase1(unittest.TestCase):
+    deck = Calculus.FrenchDeck()
+    players = [Calculus.Player('Gerald'), Calculus.Player('Ruth'), Calculus.Player('Patrick')]
+    for player in players:
+        if player.name == 'Gerald':
+            player.hand.takecard(Calculus.Card(rank='A', suit='spades'))
+            player.hand.takecard(Calculus.Card(rank='2', suit='hearts'))
+            player.hand.takecard(Calculus.Card(rank='3', suit='spades'))
+        if player.name == 'Ruth':
+            player.hand.takecard(Calculus.Card(rank='4', suit='spades'))
+            player.hand.takecard(Calculus.Card(rank='5', suit='spades'))
+            player.hand.takecard(Calculus.Card(rank='A', suit='diamonds'))
+        if player.name == 'Patrick':
+            player.hand.takecard(Calculus.Card(rank='A', suit='hearts'))
+            player.hand.takecard(Calculus.Card(rank='2', suit='hearts'))
+            player.hand.takecard(Calculus.Card(rank='3', suit='hearts'))
+
+    def testPlayTrick(self):
         # test without UI
         testTrick = Calculus.Trick('hearts',self.players)
 
         testTrick.playTrick((self.players[0].name, self.players[0].hand._cards[1]), (self.players[1].name, self.players[1].hand._cards[1]), (self.players[2].name, self.players[2].hand._cards[2]))
         print(testTrick._cards_played)
         self.assertEqual(testTrick.winner, 'Patrick')
+
+
+class CalcWinnerTestCase(unittest.TestCase):
+    deck = Calculus.FrenchDeck()
+    players = [Calculus.Player('Gerald'), Calculus.Player('Ruth'), Calculus.Player('Patrick')]
+    for player in players:
+        if player.name == 'Gerald':
+            player.hand.takecard(Calculus.Card(rank='A', suit='spades'))
+            player.hand.takecard(Calculus.Card(rank='2', suit='hearts'))
+            player.hand.takecard(Calculus.Card(rank='3', suit='spades'))
+        if player.name == 'Ruth':
+            player.hand.takecard(Calculus.Card(rank='4', suit='spades'))
+            player.hand.takecard(Calculus.Card(rank='5', suit='spades'))
+            player.hand.takecard(Calculus.Card(rank='A', suit='diamonds'))
+        if player.name == 'Patrick':
+            player.hand.takecard(Calculus.Card(rank='A', suit='hearts'))
+            player.hand.takecard(Calculus.Card(rank='2', suit='hearts'))
+            player.hand.takecard(Calculus.Card(rank='3', suit='hearts'))
 
     def testCalcWinnerTrick2(self):
         # test calcWinner. win with trump
@@ -110,7 +164,7 @@ class TrickTestCase(unittest.TestCase):
 
 class MyTestCase(unittest.TestCase):
     def test_something(self):
-        self.assertEqual(True, False)  # add assertion here
+        self.assertEqual(True, True)  # add assertion here
 
 
 class RoundTestCase(unittest.TestCase):
@@ -140,6 +194,7 @@ class RoundTestCase(unittest.TestCase):
     def testgetBets2(self):
         # test not passing in bets. then use UI to enter
         round1 = Calculus.Round(9, self.deck, self.players)
+        print('Gerald-1, Ruth-2, Patrick-3')
         round1.getBets()
         self.assertEqual([('Gerald', 1), ('Ruth', 2), ('Patrick', 3)], round1.bets)
 
@@ -167,6 +222,7 @@ class RoundTestCase(unittest.TestCase):
         self.assertEqual(-1, round1.internal_compare_bet_and_actual('Gerald'))
         self.assertEqual(-2, round1.internal_compare_bet_and_actual('Ruth'))
         self.assertEqual(-3, round1.internal_compare_bet_and_actual('Patrick'))
+
 
 class ActualsTestCase(unittest.TestCase):
     deck = Calculus.FrenchDeck()
@@ -197,6 +253,7 @@ class ActualsTestCase(unittest.TestCase):
         round1.updateActual('Ruth')
         self.assertEqual([['Gerald', 1], ['Ruth', 1], ['Patrick', 0]], round1.actual)
 
+
 class GameTestCase(unittest.TestCase):
     def testInitGame0(self):
         deck = Calculus.FrenchDeck()
@@ -208,7 +265,6 @@ class GameTestCase(unittest.TestCase):
         self.assertEqual(players[1].name, 'Ruth')
         #newGame.initRounds()
 
-
     def testInitGame1(self):
         deck = Calculus.FrenchDeck()
         newGame = Calculus.Game(deck=deck, numOfPlayers=2, numOfRounds=10)
@@ -218,6 +274,31 @@ class GameTestCase(unittest.TestCase):
         newGame.initRounds()
         for rounds in newGame._rounds:
             print(rounds._numOfCards)
+
+
+class FrenchDeckTestCase(unittest.TestCase):
+    # test create non-shuffled deck
+    def testDeck0(self):
+        deck = Calculus.FrenchDeck('N')
+        self.assertEqual(len(deck._cards),52)
+        self.assertEqual(Calculus.Card(rank='2', suit='spades'),deck.__getitem__(0))
+        self.assertEqual(0,len(deck._burnt_cards))
+
+    # test create shuffled deck
+    def testDeck1(self):
+        deck = Calculus.FrenchDeck('Y')
+        self.assertEqual(len(deck),52)
+        self.assertNotEqual(Calculus.Card(rank='2', suit='spades'),deck.__getitem__(0))
+
+    # test dealing a card
+    def testDeck2(self):
+        deck = Calculus.FrenchDeck()
+        self.assertEqual(len(deck), 52)
+        card1 = deck.dealCard()
+        self.assertEqual(1, len(deck._burnt_cards))
+        card2 = deck.dealCard()
+        self.assertEqual(2, len(deck._burnt_cards))
+        self.assertEqual(50,len(deck))
 
 
 class ValidCardTestCase(unittest.TestCase):
@@ -239,7 +320,7 @@ class ValidCardTestCase(unittest.TestCase):
         if player.name == 'Patrick':
             player.hand.takecard(Calculus.Card(rank='A', suit='hearts'))
             player.hand.takecard(Calculus.Card(rank='2', suit='hearts'))
-            player.hand.takecard(Calculus.Card(rank='3', suit='hearts'))
+            player.hand.takecard(Calculus.Card(rank='5', suit='hearts'))
 
     def testValidCard0(self):
         # trumps broken, can lead with non-trump
@@ -261,6 +342,25 @@ class ValidCardTestCase(unittest.TestCase):
         response = Calculus.valid_card('hearts', False, self.players[2],Calculus.Card(rank='2', suit='hearts'), [])
         self.assertEqual(True, response)
 
+    def testValidCard5(self):
+        # test following suit. player1 cannot play diamonds as they have a spade in hand
+        response = Calculus.valid_card('hearts', False, self.players[1],Calculus.Card(rank='A', suit='diamonds'), [['Gerald', Calculus.Card(rank='3', suit='spades')]])
+        self.assertEqual(False, response)
+
+    def testValidCard6(self):
+        # test following suit. player1 can play diamonds as they do not have a heart in hand
+        response = Calculus.valid_card('hearts', False, self.players[1],Calculus.Card(rank='A', suit='diamonds'), [['Gerald', Calculus.Card(rank='2', suit='hearts')]])
+        self.assertEqual(True, response)
+
+    def testValidCard7(self):
+        # test following suit. player1 follows suit
+        response = Calculus.valid_card('hearts', False, self.players[1],Calculus.Card(rank='4', suit='spades'), [['Gerald', Calculus.Card(rank='A', suit='spades')]])
+        self.assertEqual(True, response)
+
+    def testValidCard8(self):
+        # test following suit. player2 can play hearts
+        response = Calculus.valid_card('hearts', True, self.players[2],Calculus.Card(rank='A', suit='hearts'), [['Gerald', Calculus.Card(rank='2', suit='hearts')],['Ruth', Calculus.Card(rank='4', suit='spades')]])
+        self.assertEqual(True, response)
 
 if __name__ == '__main__':
     unittest.main()
