@@ -80,7 +80,6 @@ def valid_card(trumps, trumps_broken, player, card, *played):
     allowed = False
 
     cards_played = played[0]
-
     card_rank, card_suit = card
     # you cannot lead with a trump unless trumps are broken or you only have trumps left
     if len(cards_played) == 0: # this means that you are leading
@@ -89,7 +88,8 @@ def valid_card(trumps, trumps_broken, player, card, *played):
                 allowed = True
             else: # if do play trumps, that must be all you have
                 for card in player.hand:
-                    v_card_rank, v_card_suit = card
+                    # v_card_rank, v_card_suit = card
+                    v_card_suit = card[1]
                     if v_card_suit != trumps:
                         allowed = False
                         break
@@ -101,14 +101,16 @@ def valid_card(trumps, trumps_broken, player, card, *played):
         # you have to follow suit if you can
         first_played = cards_played[0]
         first_card = first_played[1]
-        first_card_rank, first_card_suit = first_card
+        #first_card_rank, first_card_suit = first_card
+        first_card_suit = first_card[1]
         if first_card_suit == card_suit:
             # if you've followed suit then fine.
             allowed = True
         else:
             # check if the player has any of the first card's suit in their hand
             for card in player.hand:
-                v_card_rank, v_card_suit = card
+                #v_card_rank, v_card_suit = card
+                v_card_suit = card[1]
                 # if there is a card in your hand that is the same as first card played
                 if v_card_suit == first_card_suit:
                     allowed = False
@@ -152,7 +154,7 @@ class FrenchDeck:
         returned = self[-num:]
         self._burnt_cards.append(self[-num:])
         del self._cards[-num:]
-        return returned
+        return returned[0]
 
     def shuffle(self):
         if len(self._cards) != 52:
@@ -195,6 +197,7 @@ class Hand:
     def __contains__(self, item):
         return True if item in self._cards else False
 
+
 class Player:
     def __init__(self, name):
         self._score = 100
@@ -208,6 +211,9 @@ class Player:
         self.hand = Hand()
 
     def __str__(self):
+        return f'Player: {self.name}, Score: {self._score}, Hand: {self.hand}'
+
+    def __repr__(self):
         return f'Player: {self.name}, Score: {self._score}, Hand: {self.hand}'
 
 
@@ -248,7 +254,7 @@ class Game:
         return self._players
 
     def initRounds(self):
-        self._rounds = [Round((x+1), self._deck, self._players) for x in range(self.numOfRounds)]
+        self._rounds = [Round((x+1), FrenchDeck('Y'), self._players) for x in range(self.numOfRounds)]
 
     def getPlayers(self):
         return self._players
@@ -258,12 +264,21 @@ class Game:
             round.deal()
 
 
+    def getCurrentRound(self):
+        currentRound = None
+        for nextround in self._rounds:
+            currentRound = nextround
+            if not nextround._completed: break
+        return currentRound
+
+
 class Round:
     """"""
 
     def __init__(self, num, deck=FrenchDeck(), *players):
         """"""
         self._tricks = []
+        self.round_number = num
         self.players = players[0]
         #self.predicted = []
         self.actual = []
@@ -274,7 +289,8 @@ class Round:
         # store bets as a list of tuples as they don't change.
         self.bets = []
         # set number of cards in this round
-        self._numOfCards = 11 - num
+        self._numOfCards = abs(11 - num)
+        self._completed = False
 
         # set trumps
         if self._numOfCards % 4 == 0:
@@ -288,9 +304,16 @@ class Round:
         #print(f'Trumps are: {self._trumps}')
         # TODO set who starts
 
+    def __str__(self):
+        return f'Round Number: {self.round_number}\nNum of Cards: {self._numOfCards}' \
+               f'\nplayers: {self.players} ' \
+               f'\nactuals: {self.actual}'
+
     def deal(self):
         """"""
         # deal cards to players
+        for player in self.players:
+            player.newHand()
         for player in self.players:
             for x in range(self._numOfCards):
                 player.hand.takecard(self.deck.dealCard())
@@ -374,8 +397,11 @@ class Round:
         for player in self.players:
             # compare the players bet against their actual. if they are the same, update score
             player.UpdateScore(self.internal_compare_bet_and_actual(player.name))
+        self._completed = True
 
     def playTricks(self):
+        #for player in self.players:
+       #     player.newHand()
         for each_trick in range(self._numOfCards):
             self._tricks.append(Trick(self._trumps, self.players))
         for num in range(len(self._tricks)):
@@ -404,6 +430,7 @@ class Trick:
         #for player in self.players:
         #    self._cards_played.append([player.name, None])
         self._trumps = trumps
+        self._completed = False
 
     def playCard(self, playername, card):
         """"""
@@ -437,6 +464,7 @@ class Trick:
             if record[1] == tempwinner:
                 self.winner = record[0]
         #self.winner = self.players[0]
+        self._completed = True
         return (self.winner)
 
     def playTrick(self, *played):

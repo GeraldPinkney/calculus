@@ -123,6 +123,25 @@ class PlayTrickTestCase1(unittest.TestCase):
         print(testTrick._cards_played)
         self.assertEqual(testTrick.winner, 'Patrick')
 
+class PlayTrickTestCase2(unittest.TestCase):
+    deck = Calculus.FrenchDeck()
+    players = [Calculus.Player('Gerald'), Calculus.Player('Ruth'), Calculus.Player('Patrick')]
+    for player in players:
+        if player.name == 'Gerald':
+            player.hand.takecard(deck.dealCard())
+            player.hand.takecard(deck.dealCard())
+            player.hand.takecard(deck.dealCard())
+        if player.name == 'Ruth':
+            player.hand.takecard(deck.dealCard())
+            player.hand.takecard(deck.dealCard())
+            player.hand.takecard(deck.dealCard())
+        if player.name == 'Patrick':
+            player.hand.takecard(deck.dealCard())
+            player.hand.takecard(deck.dealCard())
+            player.hand.takecard(deck.dealCard())
+
+    def testPlayedCards(self):
+        self.assertEqual(3,len(self.players[0].hand))
 
 class CalcWinnerTestCase(unittest.TestCase):
     deck = Calculus.FrenchDeck()
@@ -198,6 +217,23 @@ class RoundTestCase(unittest.TestCase):
         round1.getBets()
         self.assertEqual([('Gerald', 1), ('Ruth', 2), ('Patrick', 3)], round1.bets)
 
+    def testRoundDeal0(self):
+        round1 = Calculus.Round(1,self.deck, self.players)
+        for player in self.players:
+            player.newHand()
+            self.assertEqual(0, len(player.hand))
+        round1.deal()
+        for player in self.players:
+            self.assertEqual(10, len(player.hand))
+            print(player.hand)
+
+    deck1 = Calculus.FrenchDeck()
+    players1 = [Calculus.Player('Gerald'), Calculus.Player('Ruth'), Calculus.Player('Patrick')]
+    def testPlayRound(self):
+        round2 = Calculus.Round(1, self.deck, self.players1)
+        round2.deal()
+        for player in self.players1:
+            self.assertEqual(10, len(player.hand))
 
     def testcompare_bet_and_actual0(self):
         # test if bet matches actual
@@ -272,8 +308,9 @@ class GameTestCase(unittest.TestCase):
 
         players = newGame.getPlayers()
         newGame.initRounds()
+        self.assertEqual(1, newGame.getCurrentRound().round_number)
         for rounds in newGame._rounds:
-            print(rounds._numOfCards)
+            print(rounds)
 
 
 class FrenchDeckTestCase(unittest.TestCase):
@@ -295,6 +332,7 @@ class FrenchDeckTestCase(unittest.TestCase):
         deck = Calculus.FrenchDeck()
         self.assertEqual(len(deck), 52)
         card1 = deck.dealCard()
+        print(card1)
         self.assertEqual(1, len(deck._burnt_cards))
         card2 = deck.dealCard()
         self.assertEqual(2, len(deck._burnt_cards))
