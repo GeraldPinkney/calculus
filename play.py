@@ -1,13 +1,14 @@
-import Calculus
+
 import random
 
-
+from fluentPython.Calculus.FrenchDeck import FrenchDeck
+from fluentPython.Calculus.Game import Game
 
 if __name__ == '__main__':
     # Create deck, shuffle cards, get number of players
-    deck = Calculus.FrenchDeck('Y')
+    deck = FrenchDeck('Y')
 
-    newGame = Calculus.Game(deck=deck, numOfPlayers=2, numOfRounds=10)
+    newGame = Game(deck=deck, numOfPlayers=2, numOfRounds=10)
     newGame.startGame()
 
     current_round = newGame.getCurrentRound()

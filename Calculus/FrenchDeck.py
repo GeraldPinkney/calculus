@@ -1,4 +1,5 @@
-import PlayingCards
+from fluentPython import Calculus
+from fluentPython.Calculus import *
 import random
 
 class FrenchDeck:
@@ -14,7 +15,7 @@ class FrenchDeck:
         :param shuffled:
         """
 
-        self._cards = [PlayingCards.Card(rank, suit) for suit in self.suits
+        self._cards = [Calculus.PlayingCards.Card(rank, suit) for suit in self.suits
                        for rank in self.ranks]
 
         self._burnt_cards = []
