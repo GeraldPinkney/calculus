@@ -1,10 +1,10 @@
-import FrenchDeck
-import Player
-from fluentPython.Calculus.Round import Round as Round
+from fluentPython import Calculus
+from fluentPython.Calculus import *
+
 
 
 class Game:
-    def __init__(self, deck=FrenchDeck('Y'), numOfPlayers=2, numOfRounds=10):
+    def __init__(self, deck=Calculus.FrenchDeck('Y'), numOfPlayers=2, numOfRounds=10):
 
         self._deck = deck
         self._deck.shuffle()
