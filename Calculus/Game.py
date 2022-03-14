@@ -1,10 +1,11 @@
-from fluentPython import Calculus
-from fluentPython.Calculus import *
 
+from fluentPython.Calculus.FrenchDeck import FrenchDeck
+from fluentPython.Calculus.Player import Player
+from fluentPython.Calculus.Round import Round
 
 
 class Game:
-    def __init__(self, deck=Calculus.FrenchDeck('Y'), numOfPlayers=2, numOfRounds=10):
+    def __init__(self, deck=FrenchDeck('Y'), numOfPlayers=2, numOfRounds=10):
 
         self._deck = deck
         self._deck.shuffle()
@@ -17,11 +18,15 @@ class Game:
         # set 10 rounds
         self._rounds = []
         self.trumps_broken = False
+        self._game_state = 0
+
+    def get_game_state(self):
+        if self._game_state == 0:
+            return 'awaiting setupGame'
 
 
     def startGame(self):
         self.setupGame()
-        self.initRounds()
 
     def setupGame(self, *names):
         """get player names."""
@@ -37,6 +42,7 @@ class Game:
                 playername = names[x]
                 self._players.append(Player(playername))
         self.initRounds()
+        self._game_state = 1
         return self._players
 
     def initRounds(self):

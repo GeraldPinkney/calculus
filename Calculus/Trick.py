@@ -1,5 +1,6 @@
-from fluentPython.Calculus.PlayingCards import valid_card
-
+from fluentPython.Calculus.CardsUtils import valid_card
+from fluentPython.Calculus.CardsUtils import g_trumps_broken
+from fluentPython.Calculus.CardsUtils import compare_cards
 
 class Trick:
     """an individual trick within a round.

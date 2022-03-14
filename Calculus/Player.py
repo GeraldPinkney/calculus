@@ -1,4 +1,4 @@
-import Hand
+from fluentPython.Calculus.Hand import Hand
 
 class Player:
     def __init__(self, name):

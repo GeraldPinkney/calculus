@@ -1,4 +1,5 @@
 from fluentPython.Calculus.FrenchDeck import FrenchDeck
+from fluentPython.Calculus.Trick import Trick
 
 
 class Round:
