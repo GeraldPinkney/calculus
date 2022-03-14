@@ -23,6 +23,8 @@ class Game:
     def get_game_state(self):
         if self._game_state == 0:
             return 'awaiting setupGame'
+        elif self._game_state == 1:
+            return 'setup complete, actions are getplayers, getcurrentround'
 
 
     def startGame(self):
