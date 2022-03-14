@@ -1,10 +1,12 @@
-
+# FrenchDeck.py
+"""contains the FrenchDeck class"""
 import random
 
 from fluentPython.Calculus import CardsUtils
 
 class FrenchDeck:
     """
+    methods: dealCard(), shuffle()
 
     """
     ranks = [str(n) for n in range(2, 11)] + list('JQKA')
@@ -23,6 +25,7 @@ class FrenchDeck:
 
         if shuffled == 'Y':
             self.shuffle()
+
 
     def __len__(self):
         return len(self._cards)

@@ -1,9 +1,13 @@
+# Round.py
+
 from fluentPython.Calculus.FrenchDeck import FrenchDeck
 from fluentPython.Calculus.Trick import Trick
 
 
 class Round:
-    """"""
+    """
+    contains methods, deal(), showHand(), getBets(*bets), showBets(), show_trumps(), show_actual(), playTricks()
+    """
 
     def __init__(self, num, deck=FrenchDeck(), *players):
         """"""
