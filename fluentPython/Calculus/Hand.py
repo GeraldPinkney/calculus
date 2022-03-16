@@ -21,6 +21,7 @@ class Hand:
     def __str__(self):
         return f'Hand({self._cards})'
 
-
     def __contains__(self, item):
         return True if item in self._cards else False
+
+    # TODO add sort hand method

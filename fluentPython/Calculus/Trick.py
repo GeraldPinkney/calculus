@@ -20,6 +20,7 @@ class Trick:
         #    self._cards_played.append([player.name, None])
         self._trumps = trumps
         self._completed = False
+        # TODO who leads on trick
 
     def playCard(self, playername, card):
         """"""
@@ -86,3 +87,7 @@ class Trick:
 
     def getWinner(self):
         return(self.winner)
+
+    def get_trick_state(self):
+        """"""
+        return 1 if self._completed else 0

@@ -36,7 +36,7 @@ class Round:
         if self._numOfCards % 4 == 3:
             self._trumps = 'spades'
         #print(f'Trumps are: {self._trumps}')
-        # TODO set who starts
+        # TODO set who starts round
 
     def __str__(self):
         return f'Round Number: {self.round_number}\nNum of Cards: {self._numOfCards}' \

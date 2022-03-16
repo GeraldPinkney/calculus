@@ -99,6 +99,7 @@ class InterfaceLayer:
             current_round.deal()
             self.round_menu()
         elif choice == 2:
+            # improve how this displays hand
             current_round.showHand()
             self.round_menu()
         elif choice == 3:
