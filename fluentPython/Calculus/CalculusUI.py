@@ -90,7 +90,7 @@ class InterfaceLayer:
         if game_state == 0:
             self.main_menu()
         elif game_state == 1:
-            print(f'select options: \n\t1-Deal\n\t2-Show Hand\n\t3-Show Trumps\n\t4-Show Trumps\n\t5-Get '
+            print(f'select options: \n\t1-Deal\n\t2-Show Hand\n\t3-Show Trumps\n\t4-Show Round Detail\n\t5-Get '
                   f'Bets\n\t6-Show Actual\n\t7-Play Tricks\n\t9-Last Menu\n\t10-Main Menu\n\t-1-Exit')
             choice = int(input('Enter option number: '))
         else:
@@ -102,10 +102,10 @@ class InterfaceLayer:
             current_round.showHand()
             self.round_menu()
         elif choice == 3:
-            print(current_round.show_trumps())
+            print(current_round.get_trumps())
             self.round_menu()
         elif choice == 4:
-            print(current_round.show_trumps())
+            print(current_round)
             self.round_menu()
         elif choice == 5:
             current_round.getBets()
@@ -114,7 +114,7 @@ class InterfaceLayer:
             actual = current_round.show_actual()
             print(f'Player{"Actual":>12}    Bar')
             for record in actual:
-                print(f'{record[0]:>6} {record[1]:>11} {"*" * record[1]}')
+                print(f'{record[0]:>6} {record[1]:>11}    {"*" * record[1]}')
 
             self.round_menu()
         elif choice == 7:
@@ -130,6 +130,9 @@ class InterfaceLayer:
             exit()
         else:
             exit()
+
+    def trick_menu(self):
+        pass
 
 if __name__ == "__main__":
     InterfaceLayer()
