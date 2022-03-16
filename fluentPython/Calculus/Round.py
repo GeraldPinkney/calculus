@@ -1,7 +1,7 @@
 # Round.py
 
-from fluentPython.Calculus.FrenchDeck import FrenchDeck
-from fluentPython.Calculus.Trick import Trick
+from Calculus import FrenchDeck
+from Calculus import Trick
 
 
 class Round:
