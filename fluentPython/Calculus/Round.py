@@ -84,7 +84,7 @@ class Round:
         for bet in self.bets:
             print(f'playername: {bet[0]}. bet: {bet[1]}')
 
-    def show_trumps(self):
+    def get_trumps(self):
         return self._trumps
 
     def updateActual(self, playername):
@@ -145,3 +145,7 @@ class Round:
             self.updateActual(self._tricks[num].getWinner())
 
         self.internal_score_round()
+
+    def get_round_state(self):
+        """"""
+        return 1 if self._completed else 0
