@@ -21,10 +21,10 @@ class Game:
         self._game_state = 0
 
     def get_game_state(self):
-        #f self._game_state == 0:
-            #return 'awaiting setupGame'
-        #elif self._game_state == 1:
-            #return 'setup complete, actions are getplayers, getcurrentround'
+        """returns an int that indicates game state
+            0 = awaiting setupGame
+            1 = setup complete, actions are getplayers, getcurrentround
+        """
         return self._game_state
 
 
@@ -32,7 +32,12 @@ class Game:
         self.setupGame()
 
     def setupGame(self, *names):
-        """get player names."""
+        """
+        setupGame(*names)
+        returns players
+        sets up the game by creating players using playernames provided, or if not provided gathers from print calls
+        then calls initRounds()
+        """
 
         # if player names are not passed into the setupGame method then get them from UI
         if len(names) != self._numOfPlayers:
@@ -49,7 +54,7 @@ class Game:
         return self._players
 
     def initRounds(self):
-        self._rounds = [Round((x+1), FrenchDeck('Y'), self._players) for x in range(self.numOfRounds)]
+        self._rounds = [Round((x+1), FrenchDeck('Y'), self._players) for x in range(self.numOfRounds, 0,-1)]
 
     def getPlayers(self):
         return self._players
