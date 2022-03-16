@@ -54,7 +54,7 @@ class Game:
         return self._players
 
     def initRounds(self):
-        self._rounds = [Round((x+1), FrenchDeck('Y'), self._players) for x in range(self.numOfRounds, 0,-1)]
+        self._rounds = [Round((x+1), FrenchDeck('Y'), self._players) for x in range(self.numOfRounds)]
 
     def getPlayers(self):
         return self._players
