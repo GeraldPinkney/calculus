@@ -51,6 +51,33 @@ class CompareTestCase(unittest.TestCase):
                                         CardsUtils.Card(rank='K', suit='diamonds'))
         self.assertEqual(CardsUtils.Card(rank='A', suit='spades'), result)
 
+    def test_compare8(self):
+        # both cards non-trumps, but different. first higher.
+        result = CardsUtils.compare_cards('hearts', CardsUtils.Card(rank='A', suit='spades'),
+                                        CardsUtils.Card(rank='3', suit='spades'))
+        self.assertEqual(CardsUtils.Card(rank='A', suit='spades'), result)
+
+class HandSortingTestCase(unittest.TestCase):
+    deck = FrenchDeck()
+    players = [Player('Gerald'), Player('Ruth'), Player('Patrick')]
+    for player in players:
+        if player.name == 'Gerald':
+            player.hand.takecard(CardsUtils.Card(rank='A', suit='spades'))
+            player.hand.takecard(CardsUtils.Card(rank='2', suit='hearts'))
+            player.hand.takecard(CardsUtils.Card(rank='3', suit='spades'))
+        if player.name == 'Ruth':
+            player.hand.takecard(CardsUtils.Card(rank='4', suit='spades'))
+            player.hand.takecard(CardsUtils.Card(rank='5', suit='spades'))
+            player.hand.takecard(CardsUtils.Card(rank='A', suit='diamonds'))
+        if player.name == 'Patrick':
+            player.hand.takecard(CardsUtils.Card(rank='A', suit='hearts'))
+            player.hand.takecard(CardsUtils.Card(rank='2', suit='hearts'))
+            player.hand.takecard(CardsUtils.Card(rank='3', suit='hearts'))
+
+    def testSortHand0(self):
+        self.players[0].hand.sort_hand('spades')
+        print(self.players[0])
+
 
 class PlayCardTestCase(unittest.TestCase):
     deck = FrenchDeck()

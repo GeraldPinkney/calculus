@@ -1,3 +1,26 @@
+from fluentPython.Calculus.CardsUtils import compare_cards
+
+
+def bubble_sort_cards(cards):
+    swapped = True
+    if len(cards) == 0:
+        swapped = False
+    elif len(cards) == 1:
+        swapped = False
+    else:
+        while swapped == True:
+            for i in range(1, len(cards)):
+                # check if second card is higher than first
+                if compare_cards('hearts', cards[i - 1], cards[i]) == cards[i - 1]:
+                    # if second card is higher, then swap
+                    tmp = cards[i]
+                    cards[i] = cards[i - 1]
+                    cards[i - 1] = tmp
+                    # cards[i-1], cards[i] = cards[i], cards[i-1]
+                    swapped = True
+                else:
+                    swapped = False
+    return not swapped
 
 
 class Hand:
@@ -26,7 +49,6 @@ class Hand:
             pass
             # throw exception
 
-
     def __getitem__(self, position):
         return self._cards[position]
 
@@ -51,19 +73,13 @@ class Hand:
     def __contains__(self, item):
         return True if item in self._cards else False
 
-    # TODO add sort hand method
     def sort_hand(self, trumps):
-        pass
         unsorted_hand = self._cards.copy()
         sorted_hand = []
         hearts_list = []
-        hearts_sorted = False
         clubs_list = []
-        clubs_sorted = False
         diamonds_list = []
-        diamonds_sorted = False
         spades_list = []
-        spades_sorted = False
 
         # group the cards into suits
         for card in unsorted_hand:
@@ -80,18 +96,32 @@ class Hand:
                 # throw exception
 
         # sort the cards within the suit-groups
-        for index in range(len(hearts_list)):
-            pass
+        bubble_sort_cards(hearts_list)
+        bubble_sort_cards(clubs_list)
+        bubble_sort_cards(diamonds_list)
+        bubble_sort_cards(spades_list)
 
         # sort the suit groups so trumps are on the far right, with R-B pattern for others
         if trumps == 'hearts':
-            sorted_hand.append(spades_list, diamonds_list, clubs_list, hearts_list)
+            sorted_hand.append(spades_list)
+            sorted_hand.append(diamonds_list)
+            sorted_hand.append(clubs_list)
+            sorted_hand.append(hearts_list)
         elif trumps == 'clubs':
-            sorted_hand.append(hearts_list, spades_list, diamonds_list, clubs_list)
+            sorted_hand.append(hearts_list)
+            sorted_hand.append(spades_list)
+            sorted_hand.append(diamonds_list)
+            sorted_hand.append(clubs_list)
         elif trumps == 'diamonds':
-            sorted_hand.append(clubs_list, hearts_list, spades_list, diamonds_list)
+            sorted_hand.append(clubs_list)
+            sorted_hand.append(hearts_list)
+            sorted_hand.append(spades_list)
+            sorted_hand.append(diamonds_list)
         elif trumps == 'spades':
-            sorted_hand.append(diamonds_list, clubs_list, hearts_list, spades_list)
+            sorted_hand.append(diamonds_list)
+            sorted_hand.append(clubs_list)
+            sorted_hand.append(hearts_list)
+            sorted_hand.append(spades_list)
 
         self._cards = sorted_hand.copy()
         return self._cards
