@@ -98,6 +98,10 @@ class PlayTrickTestCase(unittest.TestCase):
             player.hand.takecard(CardsUtils.Card(rank='2', suit='hearts'))
             player.hand.takecard(CardsUtils.Card(rank='3', suit='hearts'))
 
+    def testTakeCard0(self):
+        self.assertEqual(1, self.players[0].hand._num_of_hearts)
+        self.assertEqual(2, self.players[0].hand._num_of_spades)
+
     def testPlayTrick1(self):
         # g plays 1, R plays 1, P plays 2
         testTrick = Trick('hearts', self.players)
@@ -132,6 +136,7 @@ class PlayTrickTestCase1(unittest.TestCase):
         print(testTrick._cards_played)
         self.assertEqual(testTrick.winner, 'Patrick')
 
+
 class PlayTrickTestCase2(unittest.TestCase):
     deck = FrenchDeck()
     players = [Player('Gerald'), Player('Ruth'), Player('Patrick')]
@@ -151,6 +156,7 @@ class PlayTrickTestCase2(unittest.TestCase):
 
     def testPlayedCards(self):
         self.assertEqual(3,len(self.players[0].hand))
+
 
 class CalcWinnerTestCase(unittest.TestCase):
     deck = FrenchDeck()
