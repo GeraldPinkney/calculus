@@ -12,7 +12,7 @@ class Trick:
     #  calc winner
     """
 
-    def __init__(self, trumps, *players):
+    def __init__(self, trumps, *players, trumps_broken=False):
         self.players = players[0]
         self.winner = None
         self._cards_played = []
@@ -20,11 +20,22 @@ class Trick:
         #    self._cards_played.append([player.name, None])
         self._trumps = trumps
         self._completed = False
+        self._trumps_broken = trumps_broken
         # TODO who leads on trick
 
+    def __str__(self):
+        return f'Trick:   ' \
+               f'\nCards Played: {self._cards_played}' \
+               f'\nplayers:      {self.players} ' \
+               f'\nTrumps:       {self._trumps}' \
+               f'\nTrumps Broken:{self._trumps_broken}'
+
     def playCard(self, playername, card):
-        """"""
-        global g_trumps_broken
+        """
+        play a card, parameters PlayerName, Card
+        returns playername, Card
+
+        """
         input_card = card[0]
         self._cards_played.append([playername, *input_card])
         for record in self._cards_played:
@@ -33,7 +44,7 @@ class Trick:
                 print(f'playername: {record[0]}, card: {record[1]}')
                 card_rank, card_suit = card
                 if card_suit == self._trumps:
-                    g_trumps_broken = True
+                    self.set_trumps_broken(True)
 
         return (playername, card)
 
@@ -58,7 +69,7 @@ class Trick:
         return (self.winner)
 
     def playTrick(self, *played):
-        global g_trumps_broken
+
         if len(played) == 0:
             for num in range(len(self.players)):
                 card_index = -1
@@ -68,12 +79,7 @@ class Trick:
                 while (card_index < 0 or card_index > len(self.players[num].hand) and not v_valid_card) :
                     card_index = int(input(f'provide index of card, 0 to {len(self.players[num].hand) - 1}: '))
                     # check if choice is valid
-                  #  if num == 0:
-                  #      v_valid_card = valid_card(self._trumps, g_trumps_broken, self.players[num], self.players[num].hand._cards[card_index], [])
-                   # else:
-                    v_valid_card = valid_card(self._trumps, g_trumps_broken, self.players[num], self.players[num].hand._cards[card_index], self._cards_played)
-                # print(f'player {self.players[num].name}. card played: {self.players[num].hand._cards[card_index]}')
-
+                    v_valid_card = valid_card(self._trumps, self.get_trumps_broken(), self.players[num], self.players[num].hand._cards[card_index], self._cards_played)
                 # play card
                 self.playCard(self.players[num].name,self.players[num].hand.playcard(self.players[num].hand._cards[card_index]))
         else:
@@ -88,6 +94,15 @@ class Trick:
     def getWinner(self):
         return(self.winner)
 
+    def set_trumps_broken(self, value):
+        self._trumps_broken = value
+
+    def get_trumps_broken(self):
+        return self._trumps_broken
+
     def get_trick_state(self):
         """"""
-        return 1 if self._completed else 0
+        if self._completed:
+            return 1
+        else:
+            return 0

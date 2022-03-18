@@ -125,12 +125,11 @@ class PlayTrickTestCase(unittest.TestCase):
             player.hand.takecard(CardsUtils.Card(rank='2', suit='hearts'))
             player.hand.takecard(CardsUtils.Card(rank='3', suit='hearts'))
 
-    def testTakeCard0(self):
-        self.assertEqual(1, self.players[0].hand._num_of_hearts)
-        self.assertEqual(2, self.players[0].hand._num_of_spades)
 
     def testPlayTrick1(self):
         # g plays 1, R plays 1, P plays 2
+        self.assertEqual(1, self.players[0].hand._num_of_hearts)
+        self.assertEqual(2, self.players[0].hand._num_of_spades)
         testTrick = Trick('hearts', self.players)
         print('g plays 1, R plays 1, P plays 2')
         testTrick.playTrick()
@@ -382,7 +381,7 @@ class FrenchDeckTestCase(unittest.TestCase):
 
 
 class ValidCardTestCase(unittest.TestCase):
-    #valid_card(trumps, trumps_broken, player, card, *played)
+    #valid_card(trumps, _trumps_broken, player, card, *played)
     # you cannot lead with a trump unless trumps are broken
     # you have to follow suit if you can
     # if you cannot follow suit, you can play any card
@@ -441,6 +440,71 @@ class ValidCardTestCase(unittest.TestCase):
         # test following suit. player2 can play hearts
         response = CardsUtils.valid_card('hearts', True, self.players[2], CardsUtils.Card(rank='A', suit='hearts'), [['Gerald', CardsUtils.Card(rank='2', suit='hearts')], ['Ruth', CardsUtils.Card(rank='4', suit='spades')]])
         self.assertEqual(True, response)
+
+
+class TrickTestCase9(unittest.TestCase):
+    deck = FrenchDeck()
+    players = [Player('Gerald'), Player('Ruth'), Player('Patrick')]
+    for player in players:
+        if player.name == 'Gerald':
+            player.hand.takecard(CardsUtils.Card(rank='A', suit='spades'))
+            player.hand.takecard(CardsUtils.Card(rank='2', suit='hearts'))
+            player.hand.takecard(CardsUtils.Card(rank='3', suit='spades'))
+        if player.name == 'Ruth':
+            player.hand.takecard(CardsUtils.Card(rank='4', suit='spades'))
+            player.hand.takecard(CardsUtils.Card(rank='5', suit='spades'))
+            player.hand.takecard(CardsUtils.Card(rank='A', suit='diamonds'))
+        if player.name == 'Patrick':
+            player.hand.takecard(CardsUtils.Card(rank='A', suit='hearts'))
+            player.hand.takecard(CardsUtils.Card(rank='2', suit='hearts'))
+            player.hand.takecard(CardsUtils.Card(rank='3', suit='hearts'))
+
+    def testCalcBrokenTrick2(self):
+        # test calcWinner. win with trump
+        testTrick = Trick('hearts', self.players)
+        testTrick.playCard('Gerald', CardsUtils.Card(rank='2', suit='hearts'))
+        testTrick.playCard('Ruth', CardsUtils.Card(rank='4', suit='hearts'))
+        testTrick.playCard('Patrick', CardsUtils.Card(rank='3', suit='hearts'))
+        #print(testTrick._cards_played)
+        testTrick.get_trumps_broken()
+        self.assertEqual(True, testTrick.get_trumps_broken())
+
+    def testCalcBrokenTrick3(self):
+        # test calcWinner. win with high card
+        testTrick = Trick('hearts', self.players)
+        testTrick.playCard('Gerald', CardsUtils.Card(rank='3', suit='spades'))
+        testTrick.playCard('Ruth', CardsUtils.Card(rank='A', suit='clubs'))
+        testTrick.playCard('Patrick', CardsUtils.Card(rank='A', suit='spades'))
+        #print(testTrick._cards_played)
+
+        testTrick.get_trumps_broken()
+        self.assertEqual(False, testTrick.get_trumps_broken())
+        testTrick.set_trumps_broken(True)
+        self.assertEqual(True, testTrick.get_trumps_broken())
+
+class RoundTestCase0(unittest.TestCase):
+    deck = FrenchDeck()
+    players = [Player('Gerald'), Player('Ruth'), Player('Patrick')]
+
+    def testPlayNextTrick1(self):
+        # test passing in bets into the getBets method
+        round2 = Round(2, FrenchDeck(), self.players)
+        round2.deal()
+        round2.getBets()
+        print(round2.get_round_state())
+        print(round2._tricks[0])
+        current_trick = round2._tricks[0]
+        state = current_trick.get_trick_state
+        print(state)
+
+    def testPlayNextTrick0(self):
+        # test passing in bets into the getBets method
+        round1 = Round(1, FrenchDeck(), self.players)
+        round1.deal()
+        round1.getBets()
+        print(round1.play_next_trick())
+        round1.play_next_trick()
+
 
 if __name__ == '__main__':
     unittest.main()

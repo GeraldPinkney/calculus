@@ -26,6 +26,8 @@ class Round:
         self._numOfCards = abs(11 - num)
         self._completed = False
 
+        self._state = [0,0,0,0]    # cards dealt | bets gathered | tricks played | round scored
+
         # set trumps
         if self._numOfCards % 4 == 0:
             self._trumps = 'hearts'
@@ -37,6 +39,7 @@ class Round:
             self._trumps = 'spades'
         #print(f'Trumps are: {self._trumps}')
         # TODO set who starts round
+        self.setupTricks()
 
     def __str__(self):
         return f'Round Number: {self.round_number}\nNum of Cards: {self._numOfCards}' \
@@ -51,6 +54,7 @@ class Round:
         for player in self.players:
             for x in range(self._numOfCards):
                 player.hand.takecard(self.deck.dealCard())
+        self._state[0] = 1
         return 0
 
     def showHand(self):
@@ -77,6 +81,7 @@ class Round:
 
             for each_bet in temp_bets:
                 self.bets.append(each_bet)
+        self._state[1] = 1
         return self.bets
 
     def show_bets(self):
@@ -132,19 +137,46 @@ class Round:
             # compare the players bet against their actual. if they are the same, update score
             player.UpdateScore(self.internal_compare_bet_and_actual(player.name))
         self._completed = True
+        self._state[3] = 1
 
-    def playTricks(self):
-        #for player in self.players:
-       #     player.newHand()
+    def setupTricks(self):
         for each_trick in range(self._numOfCards):
             self._tricks.append(Trick(self._trumps, self.players))
+
+    #TODO rework how tricks are done. need to be able to update who leads after each trick played
+    def playTricks(self):
+
         for num in range(len(self._tricks)):
             print(f'playing trick num: {num+1}\n')
             self._tricks[num].playTrick()
+            if num > 0:
+                self._tricks[num].set_trumps_broken(self._tricks[num-1].get_trumps_broken())
         for num in range(len(self._tricks)):
             self.updateActual(self._tricks[num].getWinner())
 
         self.internal_score_round()
+
+    def play_next_trick(self):
+        if self._state[0] == 0:    #  self._state = [0,0,0,0]    # cards dealt | bets gathered | tricks played | round scored
+            return 0 # cards not dealt
+        elif self._state[1] == 0:
+            return 1  # bets not gathered
+        elif self._state[3] == 1:
+            return 3 # round completed
+        else:
+            for num in range(len(self._tricks)):
+
+                if self._tricks[num]._completed == False:
+                    # 0 means
+                    if num > 0 and self._tricks[num-1]._completed == True:
+                        current_trick = self._tricks[num]
+                        prior_trick_broken = self._tricks[num-1].get_trumps_broken()
+                        current_trick.set_trumps_broken(prior_trick_broken)
+                    current_trick = self._tricks[num]
+                    break
+        current_trick.playTrick()
+        self.updateActual(current_trick.getWinner())
+        return -1
 
     def get_round_state(self):
         """"""
