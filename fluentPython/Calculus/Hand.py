@@ -103,25 +103,40 @@ class Hand:
 
         # sort the suit groups so trumps are on the far right, with R-B pattern for others
         if trumps == 'hearts':
-            sorted_hand.append(spades_list)
-            sorted_hand.append(diamonds_list)
-            sorted_hand.append(clubs_list)
-            sorted_hand.append(hearts_list)
+            for card in spades_list:
+                sorted_hand.append(card)
+            for card in diamonds_list:
+                sorted_hand.append(card)
+            for card in clubs_list:
+                sorted_hand.append(card)
+            for card in hearts_list:
+                sorted_hand.append(card)
         elif trumps == 'clubs':
-            sorted_hand.append(hearts_list)
-            sorted_hand.append(spades_list)
-            sorted_hand.append(diamonds_list)
-            sorted_hand.append(clubs_list)
+            for card in hearts_list:
+                sorted_hand.append(card)
+            for card in spades_list:
+                sorted_hand.append(card)
+            for card in diamonds_list:
+                sorted_hand.append(card)
+            for card in clubs_list:
+                sorted_hand.append(card)
         elif trumps == 'diamonds':
-            sorted_hand.append(clubs_list)
-            sorted_hand.append(hearts_list)
-            sorted_hand.append(spades_list)
-            sorted_hand.append(diamonds_list)
+            for card in clubs_list:
+                sorted_hand.append(card)
+            for card in hearts_list:
+                sorted_hand.append(card)
+            for card in spades_list:
+                sorted_hand.append(card)
+            for card in diamonds_list:
+                sorted_hand.append(card)
         elif trumps == 'spades':
-            sorted_hand.append(diamonds_list)
-            sorted_hand.append(clubs_list)
-            sorted_hand.append(hearts_list)
-            sorted_hand.append(spades_list)
-
+            for card in diamonds_list:
+                sorted_hand.append(card)
+            for card in clubs_list:
+                sorted_hand.append(card)
+            for card in hearts_list:
+                sorted_hand.append(card)
+            for card in spades_list:
+                sorted_hand.append(card)
         self._cards = sorted_hand.copy()
         return self._cards
