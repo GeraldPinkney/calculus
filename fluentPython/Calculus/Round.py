@@ -158,24 +158,26 @@ class Round:
 
     def play_next_trick(self):
         if self._state[0] == 0:    #  self._state = [0,0,0,0]    # cards dealt | bets gathered | tricks played | round scored
-            return 0 # cards not dealt
+            return 0  # cards not dealt
         elif self._state[1] == 0:
             return 1  # bets not gathered
         elif self._state[3] == 1:
-            return 3 # round completed
+            return 3  # round completed
         else:
             for num in range(len(self._tricks)):
 
                 if self._tricks[num]._completed == False:
                     # 0 means
+                    current_trick = self._tricks[num]
                     if num > 0 and self._tricks[num-1]._completed == True:
-                        current_trick = self._tricks[num]
                         prior_trick_broken = self._tricks[num-1].get_trumps_broken()
                         current_trick.set_trumps_broken(prior_trick_broken)
+                        break
+                elif num == 0:
                     current_trick = self._tricks[num]
                     break
-        current_trick.playTrick()
-        self.updateActual(current_trick.getWinner())
+            current_trick.playTrick()
+            self.updateActual(current_trick.getWinner())
         return -1
 
     def get_round_state(self):

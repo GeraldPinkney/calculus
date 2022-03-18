@@ -517,9 +517,12 @@ class RoundTestCase0(unittest.TestCase):
         round1 = Round(1, FrenchDeck(), self.players)
         round1.deal()
         round1.getBets()
-        print(round1.play_next_trick())
+        print(round1._state)
+        print(round1._tricks[0]._completed)
+        #print(round1.play_next_trick())
         round1.play_next_trick()
-
+        round1.play_next_trick()
+        round1.play_next_trick()
 
 if __name__ == '__main__':
     unittest.main()
