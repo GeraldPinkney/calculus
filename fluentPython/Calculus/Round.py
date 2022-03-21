@@ -26,7 +26,7 @@ class Round:
         self._numOfCards = abs(11 - num)
         self._completed = False
 
-        self._state = [0,0,0,0]    # cards dealt | bets gathered | tricks played | round scored
+        self._state = [0,0,0,0,0]    # cards dealt | bets gathered | tricks played | round scored | tricks setup
 
         # set trumps
         if self._numOfCards % 4 == 0:
@@ -59,12 +59,14 @@ class Round:
 
     def showHand(self):
         # TODO change method to take player as param and only return hand of that player(s).
+        # TODO add error handling (if no players, etc)
         for player in self.players:
-            print(player.hand)
+            print(f'Player: {player.name}, Hand: {player.hand}')
 
     def getBets(self, *bets):
         iterator = 0
         total = 0
+        # TODO add error handling
         # TODO add rules to disallow bet that exceeds total number of cards. disallow bet if this is the last bet and total equals total num of cards
         if len(bets) == 0:
             # if getBets is called without bets passed into it, we must get via input()
@@ -140,8 +142,11 @@ class Round:
         self._state[3] = 1
 
     def setupTricks(self):
-        for each_trick in range(self._numOfCards):
-            self._tricks.append(Trick(self._trumps, self.players))
+        if self._state[4] == 0:
+            for each_trick in range(self._numOfCards):
+                self._tricks.append(Trick(self._trumps, self.players))
+        else:
+            raise Exception('Tricks already setup')
 
     #TODO rework how tricks are done. need to be able to update who leads after each trick played
     def playTricks(self):
@@ -158,11 +163,12 @@ class Round:
 
     def play_next_trick(self):
         if self._state[0] == 0:    #  self._state = [0,0,0,0]    # cards dealt | bets gathered | tricks played | round scored
-            return 0  # cards not dealt
+            raise Exception('Cards not dealt')
         elif self._state[1] == 0:
-            return 1  # bets not gathered
+            raise Exception('Bets not gathered')
         elif self._state[3] == 1:
-            return 3  # round completed
+            self.internal_score_round()
+            raise Exception('Round Completed')
         else:
             for num in range(len(self._tricks)):
 
@@ -172,13 +178,15 @@ class Round:
                     if num > 0 and self._tricks[num-1]._completed == True:
                         prior_trick_broken = self._tricks[num-1].get_trumps_broken()
                         current_trick.set_trumps_broken(prior_trick_broken)
+                        if num+1 == len(self._tricks):
+                            self._state[3] = 1
                         break
                 elif num == 0:
                     current_trick = self._tricks[num]
                     break
             current_trick.playTrick()
             self.updateActual(current_trick.getWinner())
-        return -1
+        return 0
 
     def get_round_state(self):
         """"""
