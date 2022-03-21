@@ -1,3 +1,6 @@
+# Trick.py
+"""contains the Trick class"""
+
 from fluentPython.Calculus.CardsUtils import valid_card
 from fluentPython.Calculus.CardsUtils import compare_cards
 
@@ -21,6 +24,7 @@ class Trick:
         self._completed = False
         self._trumps_broken = trumps_broken
         # TODO who leads on trick
+        # TODO add state
 
     def __str__(self):
         return f'Trick:   ' \

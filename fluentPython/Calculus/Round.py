@@ -1,4 +1,5 @@
 # Round.py
+"""The Round class. Used for tracking a single round within the game. contains tricks."""
 
 from Calculus import FrenchDeck
 from Calculus import Trick
@@ -60,8 +61,16 @@ class Round:
     def showHand(self):
         # TODO change method to take player as param and only return hand of that player(s).
         # TODO add error handling (if no players, etc)
+        returned = []
         for player in self.players:
             print(f'Player: {player.name}, Hand: {player.hand}')
+
+
+    def getHand(self):
+        returned = []
+        for player in self.players:
+            returned.append((player.name, player.hand, self._trumps))
+        return returned
 
     def getBets(self, *bets):
         iterator = 0

@@ -1,3 +1,6 @@
+# Hand.py
+"""contains bubble sort method & the Hand class. """
+
 from fluentPython.Calculus.CardsUtils import compare_cards
 
 
@@ -102,7 +105,7 @@ class Hand:
         bubble_sort_cards(spades_list)
 
         # sort the suit groups so trumps are on the far right, with R-B pattern for others
-        if trumps == 'hearts':
+        if trumps == 'hearts': # SDCH
             for card in spades_list:
                 sorted_hand.append(card)
             for card in diamonds_list:
@@ -111,7 +114,7 @@ class Hand:
                 sorted_hand.append(card)
             for card in hearts_list:
                 sorted_hand.append(card)
-        elif trumps == 'clubs':
+        elif trumps == 'clubs': # HSDC
             for card in hearts_list:
                 sorted_hand.append(card)
             for card in spades_list:
@@ -120,7 +123,7 @@ class Hand:
                 sorted_hand.append(card)
             for card in clubs_list:
                 sorted_hand.append(card)
-        elif trumps == 'diamonds':
+        elif trumps == 'diamonds': # CHSD
             for card in clubs_list:
                 sorted_hand.append(card)
             for card in hearts_list:
@@ -129,7 +132,7 @@ class Hand:
                 sorted_hand.append(card)
             for card in diamonds_list:
                 sorted_hand.append(card)
-        elif trumps == 'spades':
+        elif trumps == 'spades': # DCHS
             for card in diamonds_list:
                 sorted_hand.append(card)
             for card in clubs_list:

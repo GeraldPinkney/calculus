@@ -19,6 +19,7 @@ class Game:
         self._rounds = []
         self.trumps_broken = False
         self._game_state = 0
+        # TODO add state
 
     def get_game_state(self):
         """returns an int that indicates game state

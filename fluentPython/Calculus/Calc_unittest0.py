@@ -285,6 +285,7 @@ class RoundTestCase(unittest.TestCase):
 
     deck1 = FrenchDeck()
     players1 = [Player('Gerald'), Player('Ruth'), Player('Patrick')]
+
     def testPlayRound(self):
         round2 = Round(1, self.deck, self.players1)
         round2.deal()

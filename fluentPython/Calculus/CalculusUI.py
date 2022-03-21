@@ -1,6 +1,68 @@
+# CalculusUI.py
+"""contains the InterfaceLayer class. Used for interaction with the game"""
+
 import fluentPython.Calculus
 from fluentPython.Calculus.FrenchDeck import FrenchDeck
 from fluentPython.Calculus.Game import Game
+
+
+def print_sorted_hand(hand, trumps):
+    current_highest_card = 0
+    while current_highest_card < len(hand):
+        if trumps == 'hearts':  # SDCH
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_spades
+            print(f'spades: {hand[0:current_highest_card]}')
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_diamonds
+            print(f'diamonds: {hand[prior_high:current_highest_card]}')
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_clubs
+            print(f'clubs: {hand[prior_high:current_highest_card]}')
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_hearts
+            print(f'hearts: {hand[prior_high:current_highest_card]}')
+        elif trumps == 'clubs':  # HSDC
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_hearts
+            print(f'hearts: {hand[prior_high:current_highest_card]}')
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_spades
+            print(f'spades: {hand[0:current_highest_card]}')
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_diamonds
+            print(f'diamonds: {hand[prior_high:current_highest_card]}')
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_clubs
+            print(f'clubs: {hand[prior_high:current_highest_card]}')
+        elif trumps == 'diamonds':  # CHSD
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_clubs
+            print(f'clubs: {hand[prior_high:current_highest_card]}')
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_hearts
+            print(f'hearts: {hand[prior_high:current_highest_card]}')
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_spades
+            print(f'spades: {hand[0:current_highest_card]}')
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_diamonds
+            print(f'diamonds: {hand[prior_high:current_highest_card]}')
+        elif trumps == 'spades':  # DCHS
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_diamonds
+            print(f'diamonds: {hand[prior_high:current_highest_card]}')
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_clubs
+            print(f'clubs: {hand[prior_high:current_highest_card]}')
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_hearts
+            print(f'hearts: {hand[prior_high:current_highest_card]}')
+            prior_high = current_highest_card
+            current_highest_card += hand._num_of_spades
+            print(f'spades: {hand[0:current_highest_card]}')
+        else:
+            raise Exception('trumps are invalid')
 
 
 class InterfaceLayer:
@@ -99,11 +161,15 @@ class InterfaceLayer:
             current_round.deal()
             self.round_menu()
         elif choice == 2:
-            # improve how this displays hand
-            current_round.showHand()
+            #current_round.showHand()
+            hands = current_round.getHand()
+            for each_hand in hands:
+                print(f'player: {each_hand[0]}')
+                print_sorted_hand(each_hand[1],each_hand[2])
+                print('\n')
+
             self.round_menu()
         elif choice == 25:
-            # improve how this displays hand
             for player in self.current_game.getPlayers():
                 player.hand.sort_hand(current_round.get_trumps())
             self.round_menu()

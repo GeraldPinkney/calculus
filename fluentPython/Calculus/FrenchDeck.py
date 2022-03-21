@@ -17,7 +17,7 @@ class FrenchDeck:
         # creates 52 card deck with suits
         :param shuffled:
         """
-
+        # TODO add state
         self._cards = [CardsUtils.Card(rank, suit) for suit in self.suits
                        for rank in self.ranks]
 
