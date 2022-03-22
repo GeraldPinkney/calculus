@@ -263,14 +263,14 @@ class RoundTestCase(unittest.TestCase):
         # test passing in bets into the getBets method
         round1 = Round(9, FrenchDeck(), self.players)
         input_bets = [('Gerald', 1), ('Ruth', 2), ('Patrick', 3)]
-        round1.getBets(input_bets)
+        round1.setBets(input_bets)
         self.assertEqual([('Gerald', 1), ('Ruth', 2), ('Patrick', 3)],round1.bets)
 
     def testgetBets2(self):
         # test not passing in bets. then use UI to enter
         round1 = Round(9, FrenchDeck(), self.players)
         print('Gerald-1, Ruth-2, Patrick-3')
-        round1.getBets()
+        round1.setBets()
         self.assertEqual([('Gerald', 1), ('Ruth', 2), ('Patrick', 3)], round1.bets)
 
     def testRoundDeal0(self):
@@ -296,7 +296,7 @@ class RoundTestCase(unittest.TestCase):
         # test if bet matches actual
         round1 = Round(9, FrenchDeck(), self.players)
         input_bets = [('Gerald', 1), ('Ruth', 2), ('Patrick', 0)]
-        round1.getBets(input_bets)
+        round1.setBets(input_bets)
         round1.updateActual('Gerald')
         round1.updateActual('Ruth')
         round1.updateActual('Ruth')
@@ -308,7 +308,7 @@ class RoundTestCase(unittest.TestCase):
         # test if bet does not match actual
         round1 = Round(9, FrenchDeck(), self.players)
         input_bets = [('Gerald', 1), ('Ruth', 2), ('Patrick', 0)]
-        round1.getBets(input_bets)
+        round1.setBets(input_bets)
         round1.updateActual('Patrick')
         round1.updateActual('Patrick')
         round1.updateActual('Patrick')
@@ -502,22 +502,12 @@ class RoundTestCase0(unittest.TestCase):
     deck = FrenchDeck()
     players = [Player('Gerald'), Player('Ruth'), Player('Patrick')]
 
-    def testPlayNextTrick1(self):
-        # test passing in bets into the getBets method
-        round2 = Round(2, FrenchDeck(), self.players)
-        round2.deal()
-        round2.getBets()
-        print(round2.get_round_state())
-        print(round2._tricks[0])
-        current_trick = round2._tricks[0]
-        state = current_trick.get_trick_state
-        print(state)
 
     def testPlayNextTrick0(self):
         # test passing in bets into the getBets method
         round1 = Round(1, FrenchDeck(), self.players)
         round1.deal()
-        round1.getBets()
+        round1.setBets()
         print(round1._state)
         print(round1._tricks[0]._completed)
         #print(round1.play_next_trick())

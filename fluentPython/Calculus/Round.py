@@ -72,10 +72,10 @@ class Round:
             returned.append((player.name, player.hand, self._trumps))
         return returned
 
-    def getBets(self, *bets):
+    def setBets(self, *bets):
         iterator = 0
         total = 0
-        # TODO add error handling
+        # TODO add error handling (if someone tries to place bet twice)
         # TODO add rules to disallow bet that exceeds total number of cards. disallow bet if this is the last bet and total equals total num of cards
         if len(bets) == 0:
             # if getBets is called without bets passed into it, we must get via input()

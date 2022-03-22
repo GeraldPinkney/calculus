@@ -180,7 +180,7 @@ class InterfaceLayer:
             print(current_round)
             self.round_menu()
         elif choice == 5:
-            current_round.getBets()
+            current_round.setBets()
             self.round_menu()
         elif choice == 6:
             actual = current_round.show_actual()

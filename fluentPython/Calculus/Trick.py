@@ -14,8 +14,8 @@ class Trick:
     #  calc winner
     """
 
-    def __init__(self, trumps, *players, trumps_broken=False):
-        self.players = players[0]
+    def __init__(self, trumps, players, trumps_broken=False):
+        self.players = players
         self.winner = None
         self._cards_played = []
         #for player in self.players:
@@ -24,7 +24,7 @@ class Trick:
         self._completed = False
         self._trumps_broken = trumps_broken
         # TODO who leads on trick
-        # TODO add state
+
 
     def __str__(self):
         return f'Trick:   ' \
