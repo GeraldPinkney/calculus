@@ -1,8 +1,9 @@
 # Round.py
 """The Round class. Used for tracking a single round within the game. contains tricks."""
 
-from Calculus import FrenchDeck
-from Calculus import Trick
+from fluentPython.Calculus.FrenchDeck import FrenchDeck
+from fluentPython.Calculus.Trick import Trick
+from fluentPython.Calculus.CalculusExceptions import StateError, RoundError
 
 
 class Round:
@@ -48,29 +49,54 @@ class Round:
                f'\nactuals: {self.actual}'
 
     def deal(self):
-        """"""
-        # deal cards to players
-        for player in self.players:
-            player.newHand()
-        for player in self.players:
-            for x in range(self._numOfCards):
-                player.hand.takecard(self.deck.dealCard())
-        self._state[0] = 1
+        """deal cards to players"""
+        # Exceptions
+        if self._state[0] == 1:
+            raise StateError('cards dealt already', 'deal()', 'cannot deal cards as already dealt')
+        elif len(self.players) == 0:
+            raise Exception('players not populated')
+
+        else:
+            # loop over the players and give them a fresh, empty hand
+            for player in self.players:
+                player.newHand()
+            # loop over players and fill hand with cards
+            for player in self.players:
+                for x in range(self._numOfCards):
+                    player.hand.takecard(self.deck.dealCard())
+                # set state to indicate that cards dealt for that round
+                self._state[0] = 1
         return 0
 
     def showHand(self):
-        # TODO change method to take player as param and only return hand of that player(s).
         # TODO add error handling (if no players, etc)
-        returned = []
-        for player in self.players:
-            print(f'Player: {player.name}, Hand: {player.hand}')
+        # Exceptions
+        if len(self.players) == 0:
+            raise RoundError(self, 'showHand()', 'players not populated')
+        elif self._state[0] == 0:
+            raise StateError('cards not dealt', 'showHand()', 'cannot show cards as have none')
 
+        else:
+            for player in self.players:
+                print(f'Player: {player.name}, Hand: {player.hand}')
 
-    def getHand(self):
-        returned = []
-        for player in self.players:
-            returned.append((player.name, player.hand, self._trumps))
-        return returned
+    def getHand(self, playerName=None):
+        # Exceptions
+        if len(self.players) == 0:
+            raise RoundError(self, 'getHand()', 'players not populated')
+        elif self._state[0] == 0:
+            raise StateError('cards not dealt', 'getHand()', 'cannot show cards as have none')
+
+        else:
+            returned = []
+            if playerName is None:
+                for player in self.players:
+                    returned.append((player.name, player.hand, self._trumps))
+            else:
+                for player in self.players:
+                    if player.name == playerName:
+                        returned.append((player.name, player.hand, self._trumps))
+            return returned # [('Gerald', <fluentPython.Calculus.Hand.Hand object at 0x7f3d5e16bf40>, 'diamonds')] or [('Gerald', <fluentPython.Calculus.Hand.Hand object at 0x7f22dc476b60>, 'diamonds'), ('Ruth', <fluentPython.Calculus.Hand.Hand object at 0x7f22dc44a110>, 'diamonds'), ('Patrick', <fluentPython.Calculus.Hand.Hand object at 0x7f22dc44b820>, 'diamonds')]
 
     def setBets(self, *bets):
         iterator = 0
@@ -169,6 +195,7 @@ class Round:
             self.updateActual(self._tricks[num].getWinner())
 
         self.internal_score_round()
+        self._state[2] == 1
 
     def play_next_trick(self):
         if self._state[0] == 0:    #  self._state = [0,0,0,0]    # cards dealt | bets gathered | tricks played | round scored
@@ -188,7 +215,7 @@ class Round:
                         prior_trick_broken = self._tricks[num-1].get_trumps_broken()
                         current_trick.set_trumps_broken(prior_trick_broken)
                         if num+1 == len(self._tricks):
-                            self._state[3] = 1
+                            self._state[2] = 1
                         break
                 elif num == 0:
                     current_trick = self._tricks[num]
@@ -196,6 +223,14 @@ class Round:
             current_trick.playTrick()
             self.updateActual(current_trick.getWinner())
         return 0
+
+    def get_current_trick(self):
+        if self._state[3] == 1:
+            return None
+        else:
+            current_trick = self._tricks[0]
+            for num in range(len(self._tricks)):
+                current_trick = self._tricks[num]
 
     def get_round_state(self):
         """"""

@@ -1,5 +1,6 @@
 import unittest
 from fluentPython.Calculus import FrenchDeck, CardsUtils, Player, Round, Trick, Game
+from fluentPython.Calculus.CalculusExceptions import StateError, RoundError
 
 
 class CompareTestCase(unittest.TestCase):
@@ -502,18 +503,57 @@ class RoundTestCase0(unittest.TestCase):
     deck = FrenchDeck()
     players = [Player('Gerald'), Player('Ruth'), Player('Patrick')]
 
-
-    def testPlayNextTrick0(self):
+    def testReorderPlayersTrick0(self):
         # test passing in bets into the getBets method
-        round1 = Round(1, FrenchDeck(), self.players)
-        round1.deal()
-        round1.setBets()
-        print(round1._state)
-        print(round1._tricks[0]._completed)
+        trick0 = Trick('hearts', self.players)
+        self.assertEqual('Gerald', self.players[0].name)
+        trick0.reorder_players(self.players[1])
+        self.assertEqual('Ruth', self.players[0].name)
         #print(round1.play_next_trick())
-        round1.play_next_trick()
-        round1.play_next_trick()
-        round1.play_next_trick()
+
+    def testReorderPlayersRound0(self):
+        round = Round(1, self.deck, self.players)
+
+class GetHandTestCase(unittest.TestCase):
+    deck = FrenchDeck()
+    players = [Player('Gerald'), Player('Ruth'), Player('Patrick')]
+    players1 = [Player('Gerald'), Player('Ruth'), Player('Patrick')]
+    players2 = [Player('Gerald'), Player('Ruth'), Player('Patrick')]
+
+    def testGetHand0(self):
+        # test getting 1 players hand
+        round1 = Round(9, FrenchDeck(), self.players)
+        round1.deal()
+        hand = round1.getHand('Gerald')[0]
+        self.assertEqual('Gerald', hand[0])
+
+    def testGetHand1(self):
+        # test getting all hands
+        round1 = Round(9, FrenchDeck(), self.players1)
+        round1.deal()
+        hand = round1.getHand()
+        self.assertEqual('Gerald', hand[0][0])
+        self.assertEqual('Ruth', hand[1][0])
+
+    def testGetHand2(self):
+        # test getting hand before dealt
+        round1 = Round(9, FrenchDeck(), self.players2)
+        try:
+            round1.getHand()
+        except StateError:
+            x = 1
+        finally:
+            self.assertEqual(1, x)
+
+    def testGetHand3(self):
+        # test getting hand before players populated
+        round1 = Round(9, FrenchDeck(), [])
+        try:
+            round1.getHand()
+        except RoundError:
+            x = 1
+        finally:
+            self.assertEqual(1, x)
 
 if __name__ == '__main__':
     unittest.main()

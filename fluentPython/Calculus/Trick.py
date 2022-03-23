@@ -4,6 +4,7 @@
 from fluentPython.Calculus.CardsUtils import valid_card
 from fluentPython.Calculus.CardsUtils import compare_cards
 
+
 class Trick:
     """an individual trick within a round.
     # variables:
@@ -18,13 +19,12 @@ class Trick:
         self.players = players
         self.winner = None
         self._cards_played = []
-        #for player in self.players:
+        # for player in self.players:
         #    self._cards_played.append([player.name, None])
         self._trumps = trumps
         self._completed = False
         self._trumps_broken = trumps_broken
         # TODO who leads on trick
-
 
     def __str__(self):
         return f'Trick:   ' \
@@ -51,6 +51,30 @@ class Trick:
 
         return (playername, card)
 
+    def reorder_players(self, newLead):
+        if len(self.players) == 2:
+            if self.players[0] != newLead:
+                tmp = self.players[0]
+                self.players[0] = self.players[1]
+                self.players[1] = tmp
+
+        elif len(self.players) == 3:
+            if self.players[1] == newLead:
+                tmp = self.players[0]
+                self.players[0] = self.players[1]
+                self.players[1] = self.players[2]
+                self.players[2] = tmp
+            elif self.players[2] == newLead:
+                tmp = self.players[0]
+                self.players[0] = self.players[2]
+                self.players[2] = self.players[1]
+                self.players[1] = tmp
+
+        elif len(self.players) == 4:
+            pass
+        else:
+            pass
+
     def calcWinner(self):
         # set the temp winner as the card play by lead
         tempwinner1 = self._cards_played[0]
@@ -67,7 +91,7 @@ class Trick:
         for record in self._cards_played:
             if record[1] == tempwinner:
                 self.winner = record[0]
-        #self.winner = self.players[0]
+        # self.winner = self.players[0]
         self._completed = True
         return (self.winner)
 
@@ -79,23 +103,25 @@ class Trick:
                 v_valid_card = False
                 print(f'{self.players[num].name}\'s turn.\n {self.players[num].hand}')
 
-                while (card_index < 0 or card_index > len(self.players[num].hand) and not v_valid_card) :
+                while (card_index < 0 or card_index > len(self.players[num].hand) and not v_valid_card):
                     card_index = int(input(f'provide index of card, 0 to {len(self.players[num].hand) - 1}: '))
                     # check if choice is valid
-                    v_valid_card = valid_card(self._trumps, self.get_trumps_broken(), self.players[num], self.players[num].hand._cards[card_index], self._cards_played)
+                    v_valid_card = valid_card(self._trumps, self.get_trumps_broken(), self.players[num],
+                                              self.players[num].hand._cards[card_index], self._cards_played)
                 # play card
-                self.playCard(self.players[num].name,self.players[num].hand.playcard(self.players[num].hand._cards[card_index]))
+                self.playCard(self.players[num].name,
+                              self.players[num].hand.playcard(self.players[num].hand._cards[card_index]))
         else:
             temp_played = played
             for played in temp_played:
                 name, index = played
                 self.playCard(name, index)
         winner = self.calcWinner()
-        #print(f'winner: {winner}')
+        # print(f'winner: {winner}')
         return winner
 
     def getWinner(self):
-        return(self.winner)
+        return (self.winner)
 
     def set_trumps_broken(self, value):
         self._trumps_broken = value

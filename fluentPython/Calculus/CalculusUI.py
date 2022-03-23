@@ -1,9 +1,13 @@
 # CalculusUI.py
 """contains the InterfaceLayer class. Used for interaction with the game"""
 
+import logging
 import fluentPython.Calculus
 from fluentPython.Calculus.FrenchDeck import FrenchDeck
 from fluentPython.Calculus.Game import Game
+
+
+logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
 
 
 def print_sorted_hand(hand, trumps):
@@ -80,6 +84,7 @@ class InterfaceLayer:
 
         print(f'select options: \n\t1-NewGame\n\t9-Last Menu\n\t10-Main Menu\n\t-1-Exit')
         choice = int(input('Enter option number: '))
+
         if choice == 1:
             num_of_players = int(input('Enter number of players: '))
             num_of_rounds = int(input('Enter number of rounds: '))
