@@ -69,7 +69,6 @@ class Round:
         return 0
 
     def showHand(self):
-        # TODO add error handling (if no players, etc)
         # Exceptions
         if len(self.players) == 0:
             raise RoundError(self, 'showHand()', 'players not populated')
@@ -101,24 +100,56 @@ class Round:
     def setBets(self, *bets):
         iterator = 0
         total = 0
-        # TODO add error handling (if someone tries to place bet twice)
-        # TODO add rules to disallow bet that exceeds total number of cards. disallow bet if this is the last bet and total equals total num of cards
+
         if len(bets) == 0:
             # if getBets is called without bets passed into it, we must get via input()
             for player in self.players:
                 print(f'Playername: {player.name}')
                 print(f'Hand: {player.hand}')
                 placeholder = int(input('Bet: '))
-                self.bets.append((player.name, placeholder))
-                total = total + placeholder
+                # if you are the last person to place the bet you cannot put a bet that means total = num of cards
+                if len(self.bets) == len(self.players)-1:
+                    if total + placeholder == len(self._numOfCards):
+                        raise RoundError(self, player.name, 'invalid bet')
+                    else:
+                        total = total + placeholder
+                        self.bets.append((player.name, placeholder))
+                else:
+                    total = total + placeholder
+                    self.bets.append((player.name, placeholder))
+
                 print(f'Num of Cards: {self._numOfCards}, current bet: {placeholder}, running total: {total}')
                 iterator += 1
+            # update state once all bets are gathered
+            self._state[1] = 1
+
         else:
+            # set current total for bets previously received
+            current_total = 0
+            for bet in self.bets:
+                current_total += self.bets[1]
+
             temp_bets = bets[0]
 
+            # check to see if player has placed bet already
             for each_bet in temp_bets:
-                self.bets.append(each_bet)
-        self._state[1] = 1
+                for player in self.players:
+                    if player.name == each_bet[0]:
+                        raise RoundError(self,'setBets()', 'player is trying to set bet again')
+
+            for each_bet in temp_bets:
+                #if you are the last person to place the bet you cannot put a bet that means total = num of cards
+                if len(self.bets) == len(self.players)-1:
+                    if each_bet[1] + current_total == len(self._numOfCards):
+                        raise RoundError(self, player.name, 'invalid bet')
+                    else:
+                        self.bets.append(each_bet)
+                else:
+                    self.bets.append(each_bet)
+
+            # update state once all bets are gathered
+            if len(self.bets) == len(self.players):
+                self._state[1] = 1
         return self.bets
 
     def show_bets(self):
