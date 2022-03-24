@@ -115,7 +115,8 @@ class Trick:
                 v_valid_card = False
                 print(f'{self.players[num].name}\'s turn.\n {self.players[num].hand}')
 
-                while (card_index < 0 or card_index > len(self.players[num].hand) and not v_valid_card):
+                #while (card_index < 0 or card_index > len(self.players[num].hand) and not v_valid_card):
+                while not v_valid_card:
                     card_index = int(input(f'provide index of card, 0 to {len(self.players[num].hand) - 1}: '))
                     # check if choice is valid
                     v_valid_card = valid_card(self._trumps, self.get_trumps_broken(), self.players[num],
