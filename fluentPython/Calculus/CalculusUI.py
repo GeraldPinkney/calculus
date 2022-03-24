@@ -188,7 +188,7 @@ class InterfaceLayer:
             current_round.setBets()
             self.round_menu()
         elif choice == 6:
-            actual = current_round.show_actual()
+            actual = current_round.get_actual()
             print(f'Player{"Actual":>12}    Bar')
             for record in actual:
                 print(f'{record[0]:>6} {record[1]:>11}    {"*" * record[1]}')

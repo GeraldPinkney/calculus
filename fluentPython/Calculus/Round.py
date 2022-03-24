@@ -177,6 +177,9 @@ class Round:
             print(f'playername: {record[0]}, current actual: {record[1]}')
         return self.actual
 
+    def get_actual(self):
+        return self.actual
+
     def internal_compare_bet_and_actual(self, playername):
         # if actual != bet, return the difference between actual and bet as a negative.
         # if actual == bet, return abs(actual)
