@@ -109,7 +109,7 @@ class Round:
                 placeholder = int(input('Bet: '))
                 # if you are the last person to place the bet you cannot put a bet that means total = num of cards
                 if len(self.bets) == len(self.players)-1:
-                    if total + placeholder == len(self._numOfCards):
+                    if total + placeholder == self._numOfCards:
                         raise RoundError(self, player.name, 'invalid bet')
                     else:
                         total = total + placeholder
