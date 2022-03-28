@@ -106,12 +106,12 @@ class Round:
         elif self._state[0] == 0:
             raise StateError('cards not dealt', 'setBets()', 'deal cards before setting bets')
 
-
         iterator = 0
         total = 0
 
         if len(bets) == 0:
             # if getBets is called without bets passed into it, we must get via input()
+            #ToDo change so only gather bets for those that are not placed bets already
             for player in self.players:
                 print(f'Playername: {player.name}')
                 print(f'Hand: {player.hand}')
@@ -286,3 +286,7 @@ class Round:
     def get_round_state(self):
         """"""
         return 1 if self._completed else 0
+
+    def get_round_state_detail(self):
+        #self._state = [0, 0, 0, 0, 0]  # cards dealt | bets gathered | tricks played | round scored | tricks setup
+        return self._state

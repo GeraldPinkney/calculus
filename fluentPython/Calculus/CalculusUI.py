@@ -3,8 +3,10 @@
 
 import logging
 import fluentPython.Calculus
+from fluentPython.Calculus.CalculusExceptions import RoundError
 from fluentPython.Calculus.FrenchDeck import FrenchDeck
 from fluentPython.Calculus.Game import Game
+from fluentPython.Calculus.Round import Round
 
 
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
@@ -80,15 +82,15 @@ class InterfaceLayer:
     def main_menu(self):
         self.last_menu = self.current_menu
         self.current_menu = 'Main Menu'
-        print(f'\nCurrent Menu: {self.current_menu}, Last Menu: {self.last_menu}')
+        #print(f'\nCurrent Menu: {self.current_menu}, Last Menu: {self.last_menu}')
 
-        print(f'select options: \n\t1-NewGame\n\t9-Last Menu\n\t10-Main Menu\n\t-1-Exit')
+        print(f'\nselect options: \n\t1-NewGame\n\t9-Last Menu\n\t10-Main Menu\n\t-1-Exit')
         choice = int(input('Enter option number: '))
 
         if choice == 1:
             num_of_players = int(input('Enter number of players: '))
-            num_of_rounds = int(input('Enter number of rounds: '))
-            self.current_game = Game(FrenchDeck(), num_of_players, num_of_rounds)
+            #num_of_rounds = int(input('Enter number of rounds: '))
+            self.current_game = Game(FrenchDeck(), num_of_players, 10)
             players = []
             for names in range(num_of_players):
                 players.append(input('Enter name of player: '))
@@ -107,14 +109,14 @@ class InterfaceLayer:
     def game_menu(self):
         self.last_menu = self.current_menu
         self.current_menu = 'Game Menu'
-        print(f'\nCurrent Menu: {self.current_menu}, Last Menu: {self.last_menu}')
+        #print(f'\nCurrent Menu: {self.current_menu}, Last Menu: {self.last_menu}')
 
         game_state = self.current_game.get_game_state()
         if game_state == 0:
             self.main_menu()
         elif game_state == 1:
-            print('Setup Complete, actions below')
-            print(f'select options: \n\t1-Get Players\n\t2-Play Round\n\t8-Game Menu\n\t9-Last Menu\n\t10-Main Menu\n\t-1-Exit')
+            print('\nSetup Complete, actions below')
+            print(f'select options: \n\t1-Get Players\n\t2-Play Round\n\t8-Game Menu\t9-Last Menu\t10-Main Menu\t-1-Exit')
             choice = int(input('Enter option number: '))
         else:
             exit()
@@ -150,15 +152,29 @@ class InterfaceLayer:
     def round_menu(self):
         self.last_menu = self.current_menu
         self.current_menu = 'Round Menu'
-        print(f'\nCurrent Menu: {self.current_menu}, Last Menu: {self.last_menu}')
+        #print(f'\nCurrent Menu: {self.current_menu}, Last Menu: {self.last_menu}')
 
         game_state = self.current_game.get_game_state()
         current_round = self.current_game.getCurrentRound()
+        # print the current state of the round to indicate next action
         if game_state == 0:
             self.main_menu()
+
         elif game_state == 1:
-            print(f'select options: \n\t1-Deal\n\t2-Show Hand\n\t25-Sort Hand\n\t3-Show Trumps\n\t4-Show Round Detail\n\t5-Get '
-                  f'Bets\n\t6-Show Actual\n\t7-Play Trick\n\t8-Play Tricks\n\t9-Last Menu\n\t10-Main Menu\n\t-1-Exit')
+            # cards dealt | bets gathered | tricks played | round scored | tricks setup
+            if current_round.get_round_state_detail()[0] == 0:
+                print(f'select options: \n\t1-Deal\n\t'
+                      f'9-Last Menu\t10-Main Menu\t-1-Exit')
+            elif current_round.get_round_state_detail()[0] == 1 and current_round.get_round_state_detail()[1] == 0 :
+                print(f'select options: \n\t2-Show Hand\t25-Sort Hand\t3-Show Trumps\n\t5-Get Bets\n\t'
+                      f'9-Last Menu\t10-Main Menu\t-1-Exit')
+            elif current_round.get_round_state_detail()[0] == 1 and current_round.get_round_state_detail()[1] == 1 :
+                print(
+                    f'select options: \n\t2-Show Hand\t25-Sort Hand\t3-Show Trumps\t4-Show Round Detail\t7-Play Trick\t8-Play Tricks\t'
+                    f'9-Last Menu\t10-Main Menu\t-1-Exit')
+            else:
+                print(f'select options: \n\t1-Deal\t2-Show Hand\t25-Sort Hand\t3-Show Trumps\t4-Show Round Detail\n\t5-Get '
+                      f'Bets\t6-Show Actual\t7-Play Trick\t8-Play Tricks\tt9-Last Menu\t10-Main Menu\t-1-Exit')
             choice = int(input('Enter option number: '))
         else:
             exit()
@@ -185,8 +201,12 @@ class InterfaceLayer:
             print(current_round)
             self.round_menu()
         elif choice == 5:
-            current_round.setBets()
-            self.round_menu()
+            try:
+                current_round.setBets()
+            except RoundError as error:
+                print(f'action: {error.action}, message: {error.msg}')
+            finally:
+                self.round_menu()
         elif choice == 6:
             actual = current_round.get_actual()
             print(f'Player{"Actual":>12}    Bar')
