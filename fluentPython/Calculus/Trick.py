@@ -24,7 +24,6 @@ class Trick:
         self._trumps = trumps
         self._completed = False
         self._trumps_broken = trumps_broken
-        # TODO who leads on trick
 
     def __str__(self):
         return f'Trick:   ' \
@@ -114,7 +113,7 @@ class Trick:
                 card_index = -1
                 v_valid_card = False
                 print(f'{self.players[num].name}\'s turn.\n {self.players[num].hand}')
-
+                # ToDo change how this works so it throws an exception if invalid card, but catches it and handles it
                 #while (card_index < 0 or card_index > len(self.players[num].hand) and not v_valid_card):
                 while not v_valid_card:
                     card_index = int(input(f'provide index of card, 0 to {len(self.players[num].hand) - 1}: '))

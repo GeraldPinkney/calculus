@@ -166,12 +166,12 @@ class InterfaceLayer:
                 print(f'select options: \n\t1-Deal\n\t'
                       f'9-Last Menu\t10-Main Menu\t-1-Exit')
             elif current_round.get_round_state_detail()[0] == 1 and current_round.get_round_state_detail()[1] == 0 :
-                print(f'select options: \n\t2-Show Hand\t25-Sort Hand\t3-Show Trumps\n\t5-Get Bets\n\t'
+                print(f'select options: \n\t2-Show Hand\t25-Sort Hand\t3-Show Trumps\t5-Get Bets\n\t'
                       f'9-Last Menu\t10-Main Menu\t-1-Exit')
             elif current_round.get_round_state_detail()[0] == 1 and current_round.get_round_state_detail()[1] == 1 :
                 print(
-                    f'select options: \n\t2-Show Hand\t25-Sort Hand\t3-Show Trumps\t4-Show Round Detail\t7-Play Trick\t8-Play Tricks\t'
-                    f'9-Last Menu\t10-Main Menu\t-1-Exit')
+                    f'select options: \n\t2-Show Hand\t25-Sort Hand\t3-Show Trumps\t7-Play Trick\t8-Play Tricks\n\t'
+                    f'9-Last Menu\t10-Main Menu\t-1-Exit\t4-Show Round Detail')
             else:
                 print(f'select options: \n\t1-Deal\t2-Show Hand\t25-Sort Hand\t3-Show Trumps\t4-Show Round Detail\n\t5-Get '
                       f'Bets\t6-Show Actual\t7-Play Trick\t8-Play Tricks\tt9-Last Menu\t10-Main Menu\t-1-Exit')

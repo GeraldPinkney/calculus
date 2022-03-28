@@ -41,6 +41,40 @@ class Round:
             self._trumps = 'spades'
         #print(f'Trumps are: {self._trumps}')
         # TODO set who starts round
+        self._lead = None
+        # if 2 players
+        if len(self.players) == 2:
+            if self._numOfCards % len(self.players) == (len(self.players) - len(self.players)):
+                self._lead = self.players[(len(self.players) - len(self.players))]
+            elif self._numOfCards % len(self.players) == (len(self.players) - len(self.players)-1):
+                self._lead = self.players[(len(self.players) - len(self.players))-1]
+            else:
+                raise RoundError(self, 'setLead', '2 players, cards dodgy')
+        # if 3 players
+        elif len(self.players) == 3:
+            if self._numOfCards % len(self.players) == (len(self.players) - len(self.players)):
+                self._lead = self.players[(len(self.players) - len(self.players))]
+            elif self._numOfCards % len(self.players) == (len(self.players) - len(self.players)-1):
+                self._lead = self.players[(len(self.players) - len(self.players))-1]
+            elif self._numOfCards % len(self.players) == (len(self.players) - len(self.players) - 2):
+                self._lead = self.players[(len(self.players) - len(self.players)) - 2]
+            else:
+                raise RoundError(self, 'setLead', '3 players, cards dodgy')
+        # if 4 players
+        elif len(self.players) == 4:
+            if self._numOfCards % len(self.players) == (len(self.players) - len(self.players)):
+                self._lead = self.players[(len(self.players) - len(self.players))]
+            elif self._numOfCards % len(self.players) == (len(self.players) - len(self.players)-1):
+                self._lead = self.players[(len(self.players) - len(self.players))-1]
+            elif self._numOfCards % len(self.players) == (len(self.players) - len(self.players) - 2):
+                self._lead = self.players[(len(self.players) - len(self.players)) - 2]
+            elif self._numOfCards % len(self.players) == (len(self.players) - len(self.players) - 3):
+                self._lead = self.players[(len(self.players) - len(self.players)) - 3]
+            else:
+                raise RoundError(self, 'setLead', '4 players, cards dodgy')
+        else:
+            raise RoundError(self, 'setLead', 'Wrong num of players')
+
         self.setupTricks()
 
     def __str__(self):
