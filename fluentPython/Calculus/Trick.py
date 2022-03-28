@@ -107,7 +107,7 @@ class Trick:
         return returned
 
     def playTrick(self, *played):
-
+    # ToDo work out how to actually call this properly rather than having to call input()
         if len(played) == 0:
             for num in range(len(self.players)):
                 card_index = -1

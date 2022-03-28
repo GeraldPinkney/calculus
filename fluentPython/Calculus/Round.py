@@ -286,6 +286,9 @@ class Round:
             raise RoundError(self, 'playTricks()', 'tricks not setup')
         else:
             for num in range(len(self._tricks)):
+                # skip any completed tricks
+                if self._tricks[num]._completed:
+                    continue
                 print(f'playing trick num: {num+1}\n')
                 if num == 0:
                     # reorder if its the first trick to match lead
