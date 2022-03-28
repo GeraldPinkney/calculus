@@ -50,11 +50,13 @@ class Round:
 
     def deal(self):
         """deal cards to players"""
-        # Exceptions
+        # Exceptions  # cards dealt | bets gathered | tricks played | round scored | tricks setup
         if self._state[0] == 1:
             raise StateError('cards dealt already', 'deal()', 'cannot deal cards as already dealt')
+        if self._state[1] == 1:
+            raise StateError('Bets gathered already', 'deal()', 'cannot deal as bets made')
         elif len(self.players) == 0:
-            raise Exception('players not populated')
+            raise RoundError(self, 'deal()', 'players not populated')
 
         else:
             # loop over the players and give them a fresh, empty hand
@@ -69,7 +71,7 @@ class Round:
         return 0
 
     def showHand(self):
-        # Exceptions
+        # Exceptions  # cards dealt | bets gathered | tricks played | round scored | tricks setup
         if len(self.players) == 0:
             raise RoundError(self, 'showHand()', 'players not populated')
         elif self._state[0] == 0:
@@ -80,7 +82,7 @@ class Round:
                 print(f'Player: {player.name}, Hand: {player.hand}')
 
     def getHand(self, playerName=None):
-        # Exceptions
+        # Exceptions  # cards dealt | bets gathered | tricks played | round scored | tricks setup
         if len(self.players) == 0:
             raise RoundError(self, 'getHand()', 'players not populated')
         elif self._state[0] == 0:
@@ -98,6 +100,13 @@ class Round:
             return returned # [('Gerald', <fluentPython.Calculus.Hand.Hand object at 0x7f3d5e16bf40>, 'diamonds')] or [('Gerald', <fluentPython.Calculus.Hand.Hand object at 0x7f22dc476b60>, 'diamonds'), ('Ruth', <fluentPython.Calculus.Hand.Hand object at 0x7f22dc44a110>, 'diamonds'), ('Patrick', <fluentPython.Calculus.Hand.Hand object at 0x7f22dc44b820>, 'diamonds')]
 
     def setBets(self, *bets):
+        # Exceptions  # cards dealt | bets gathered | tricks played | round scored | tricks setup
+        if len(self.players) == 0:
+            raise RoundError(self, 'getHand()', 'players not populated')
+        elif self._state[0] == 0:
+            raise StateError('cards not dealt', 'setBets()', 'deal cards before setting bets')
+
+
         iterator = 0
         total = 0
 
@@ -153,6 +162,14 @@ class Round:
         return self.bets
 
     def show_bets(self):
+        # Exceptions  # cards dealt | bets gathered | tricks played | round scored | tricks setup
+        if len(self.players) == 0:
+            raise RoundError(self, 'getHand()', 'players not populated')
+        elif self._state[0] == 0:
+            raise StateError('cards not dealt', 'setBets()', 'deal cards before setting bets')
+        elif self._state[1] == 0:
+            raise StateError('Bets not gathered', 'show_bets()', 'cannot show bets without getting bets')
+
         print(self.bets)
         for bet in self.bets:
             print(f'playername: {bet[0]}. bet: {bet[1]}')
