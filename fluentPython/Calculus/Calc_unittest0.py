@@ -152,6 +152,12 @@ class PlayTrickTestCase(unittest.TestCase):
         print(testTrick._cards_played)
         self.assertEqual(testTrick.winner, 'Patrick')
 
+    def testReorderPlayers0(self):
+        testTrick = Trick('hearts', self.players)
+        #print(testTrick)
+        new_lead = testTrick.get_player_from_name('Patrick')
+        testTrick.reorder_players(new_lead)
+        self.assertEqual('Patrick', self.players[0].name)
 
 class PlayTrickTestCase1(unittest.TestCase):
     deck = FrenchDeck()

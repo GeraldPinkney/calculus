@@ -118,7 +118,7 @@ class Round:
                 placeholder = int(input('Bet: '))
                 # if you are the last person to place the bet you cannot put a bet that means total = num of cards
                 if len(self.bets) == len(self.players)-1:
-                    if total + placeholder == len(self._numOfCards):
+                    if total + placeholder == self._numOfCards:
                         raise RoundError(self, player.name, 'invalid bet')
                     else:
                         total = total + placeholder
@@ -192,6 +192,9 @@ class Round:
         #print(self.actual)
         for record in self.actual:
             print(f'playername: {record[0]}, current actual: {record[1]}')
+        return self.actual
+
+    def get_actual(self):
         return self.actual
 
     def internal_compare_bet_and_actual(self, playername):

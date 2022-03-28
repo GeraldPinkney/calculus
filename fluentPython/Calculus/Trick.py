@@ -59,19 +59,21 @@ class Trick:
                 self.players[1] = tmp
 
         elif len(self.players) == 3:
-            if self.players[1] == newLead:
-                tmp = self.players[0]
-                self.players[0] = self.players[1]
-                self.players[1] = self.players[2]
-                self.players[2] = tmp
-            elif self.players[2] == newLead:
-                tmp = self.players[0]
-                self.players[0] = self.players[2]
-                self.players[2] = self.players[1]
-                self.players[1] = tmp
+            if self.players[0] != newLead:
+                if self.players[1] == newLead:
+                    tmp = self.players[0]
+                    self.players[0] = self.players[1]
+                    self.players[1] = self.players[2]
+                    self.players[2] = tmp
+                elif self.players[2] == newLead:
+                    tmp = self.players[0]
+                    self.players[0] = self.players[2]
+                    self.players[2] = self.players[1]
+                    self.players[1] = tmp
 
         elif len(self.players) == 4:
             pass
+            #ToDo will need to implement this later.
         else:
             pass
 
@@ -93,7 +95,17 @@ class Trick:
                 self.winner = record[0]
         # self.winner = self.players[0]
         self._completed = True
-        return (self.winner)
+
+        # now reorder the players to set the new lead based off the winner of the last one
+        self.reorder_players(self.get_player_from_name(self.winner))
+        return self.winner
+
+    def get_player_from_name(self, player_name):
+        returned = None
+        for player in self.players:
+            if player_name == player.name:
+                returned = player
+        return returned
 
     def playTrick(self, *played):
 
@@ -103,7 +115,8 @@ class Trick:
                 v_valid_card = False
                 print(f'{self.players[num].name}\'s turn.\n {self.players[num].hand}')
 
-                while (card_index < 0 or card_index > len(self.players[num].hand) and not v_valid_card):
+                #while (card_index < 0 or card_index > len(self.players[num].hand) and not v_valid_card):
+                while not v_valid_card:
                     card_index = int(input(f'provide index of card, 0 to {len(self.players[num].hand) - 1}: '))
                     # check if choice is valid
                     v_valid_card = valid_card(self._trumps, self.get_trumps_broken(), self.players[num],
