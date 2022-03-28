@@ -40,7 +40,7 @@ class Round:
         if self._numOfCards % 4 == 3:
             self._trumps = 'spades'
         #print(f'Trumps are: {self._trumps}')
-        # TODO set who starts round
+        # set who starts round
         self._lead = None
         # if 2 players
         if len(self.players) == 2:
@@ -268,14 +268,15 @@ class Round:
         else:
             raise Exception('Tricks already setup')
 
-    #TODO rework how tricks are done. need to be able to update who leads after each trick played
     def playTricks(self):
-
         for num in range(len(self._tricks)):
             print(f'playing trick num: {num+1}\n')
-            self._tricks[num].playTrick()
-            if num > 0:
+            if num == 0:
+                # reorder if its the first trick to match lead
+                self._tricks[num].reorder_players(self._lead)
+            elif num > 0:
                 self._tricks[num].set_trumps_broken(self._tricks[num-1].get_trumps_broken())
+            self._tricks[num].playTrick()
         for num in range(len(self._tricks)):
             self.updateActual(self._tricks[num].getWinner())
 
@@ -304,6 +305,8 @@ class Round:
                         break
                 elif num == 0:
                     current_trick = self._tricks[num]
+                    # reorder if its the first trick to match lead
+                    current_trick.reorder_players(self._lead)
                     break
             current_trick.playTrick()
             self.updateActual(current_trick.getWinner())
