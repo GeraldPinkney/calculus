@@ -31,10 +31,10 @@ def print_sorted_hand(hand, trumps):
         elif trumps == 'clubs':  # HSDC
             prior_high = current_highest_card
             current_highest_card += hand._num_of_hearts
-            print(f'hearts: {hand[prior_high:current_highest_card]}')
+            print(f'hearts: {hand[0:current_highest_card]}')
             prior_high = current_highest_card
             current_highest_card += hand._num_of_spades
-            print(f'spades: {hand[0:current_highest_card]}')
+            print(f'spades: {hand[prior_high:current_highest_card]}')
             prior_high = current_highest_card
             current_highest_card += hand._num_of_diamonds
             print(f'diamonds: {hand[prior_high:current_highest_card]}')
@@ -44,20 +44,20 @@ def print_sorted_hand(hand, trumps):
         elif trumps == 'diamonds':  # CHSD
             prior_high = current_highest_card
             current_highest_card += hand._num_of_clubs
-            print(f'clubs: {hand[prior_high:current_highest_card]}')
+            print(f'clubs: {hand[0:current_highest_card]}')
             prior_high = current_highest_card
             current_highest_card += hand._num_of_hearts
             print(f'hearts: {hand[prior_high:current_highest_card]}')
             prior_high = current_highest_card
             current_highest_card += hand._num_of_spades
-            print(f'spades: {hand[0:current_highest_card]}')
+            print(f'spades: {hand[prior_high:current_highest_card]}')
             prior_high = current_highest_card
             current_highest_card += hand._num_of_diamonds
             print(f'diamonds: {hand[prior_high:current_highest_card]}')
         elif trumps == 'spades':  # DCHS
             prior_high = current_highest_card
             current_highest_card += hand._num_of_diamonds
-            print(f'diamonds: {hand[prior_high:current_highest_card]}')
+            print(f'diamonds: {hand[0:current_highest_card]}')
             prior_high = current_highest_card
             current_highest_card += hand._num_of_clubs
             print(f'clubs: {hand[prior_high:current_highest_card]}')
@@ -66,7 +66,7 @@ def print_sorted_hand(hand, trumps):
             print(f'hearts: {hand[prior_high:current_highest_card]}')
             prior_high = current_highest_card
             current_highest_card += hand._num_of_spades
-            print(f'spades: {hand[0:current_highest_card]}')
+            print(f'spades: {hand[prior_high:current_highest_card]}')
         else:
             raise Exception('trumps are invalid')
 

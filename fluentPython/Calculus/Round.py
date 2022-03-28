@@ -3,7 +3,7 @@
 
 from fluentPython.Calculus.FrenchDeck import FrenchDeck
 from fluentPython.Calculus.Trick import Trick
-from fluentPython.Calculus.CalculusExceptions import StateError, RoundError
+from fluentPython.Calculus.CalculusExceptions import StateError, RoundError, TrickError
 
 
 class Round:
@@ -269,42 +269,58 @@ class Round:
         if self._state[4] == 0:
             for each_trick in range(self._numOfCards):
                 self._tricks.append(Trick(self._trumps, self.players))
+            # once tricks setup, update status
+            self._state[4] = 1
         else:
             raise Exception('Tricks already setup')
 
     def playTricks(self):
-        for num in range(len(self._tricks)):
-            print(f'playing trick num: {num+1}\n')
-            if num == 0:
-                # reorder if its the first trick to match lead
-                self._tricks[num].reorder_players(self._lead)
-            elif num > 0:
-                self._tricks[num].set_trumps_broken(self._tricks[num-1].get_trumps_broken())
-            self._tricks[num].playTrick()
-        for num in range(len(self._tricks)):
-            self.updateActual(self._tricks[num].getWinner())
+        if self._state[0] == 0:  # self._state = [0,0,0,0] # cards dealt | bets gathered | tricks played | round scored
+            RoundError(self, 'playTricks()', 'Cards not dealt')
+        elif self._state[1] == 0:
+            RoundError(self, 'playTricks()', 'Bets not gathered')
+        elif self._state[3] == 1:
+            #self.internal_score_round()
+            RoundError(self, 'playTricks()', 'Round Scored')
+        elif self._state[4] == 0:
+            raise RoundError(self, 'playTricks()', 'tricks not setup')
+        else:
+            for num in range(len(self._tricks)):
+                print(f'playing trick num: {num+1}\n')
+                if num == 0:
+                    # reorder if its the first trick to match lead
+                    self._tricks[num].reorder_players(self._lead)
+                elif num > 0:
+                    self._tricks[num].set_trumps_broken(self._tricks[num-1].get_trumps_broken())
+                self._tricks[num].playTrick()
+            for num in range(len(self._tricks)):
+                self.updateActual(self._tricks[num].getWinner())
 
-        self.internal_score_round()
-        self._state[2] == 1
+            self.internal_score_round()
+            self._state[2] == 1
 
     def play_next_trick(self):
         if self._state[0] == 0:    #  self._state = [0,0,0,0]    # cards dealt | bets gathered | tricks played | round scored
-            raise Exception('Cards not dealt')
+            raise RoundError(self, 'play_next_trick()', 'Cards not dealt')
         elif self._state[1] == 0:
-            raise Exception('Bets not gathered')
+            raise RoundError(self, 'play_next_trick()', 'Bets not gathered')
         elif self._state[3] == 1:
-            self.internal_score_round()
-            raise Exception('Round Completed')
+            #self.internal_score_round()
+            raise RoundError(self, 'play_next_trick()', 'Round Scored')
+        elif self._state[4] == 0:
+            raise RoundError(self, 'play_next_trick()', 'tricks not setup')
         else:
             for num in range(len(self._tricks)):
 
                 if self._tricks[num]._completed == False:
-                    # 0 means
+                    #
                     current_trick = self._tricks[num]
                     if num > 0 and self._tricks[num-1]._completed == True:
+                        # set the trumps broken property from the last trick
                         prior_trick_broken = self._tricks[num-1].get_trumps_broken()
                         current_trick.set_trumps_broken(prior_trick_broken)
                         if num+1 == len(self._tricks):
+                            # if this is the last trick of the round, set state of tricks played to Y
                             self._state[2] = 1
                         break
                 elif num == 0:
@@ -314,6 +330,10 @@ class Round:
                     break
             current_trick.playTrick()
             self.updateActual(current_trick.getWinner())
+
+            # if this is the last trick of the round, score the round
+            if self._state[2] == 1:
+                self.internal_score_round()
         return 0
 
     def get_current_trick(self):
