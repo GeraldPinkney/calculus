@@ -39,37 +39,37 @@ class Round:
             self._trumps = 'diamonds'
         if self._numOfCards % 4 == 3:
             self._trumps = 'spades'
-        #print(f'Trumps are: {self._trumps}')
+
         # set who starts round
         self._lead = None
         # if 2 players
         if len(self.players) == 2:
-            if self._numOfCards % len(self.players) == (len(self.players) - len(self.players)):
-                self._lead = self.players[(len(self.players) - len(self.players))]
-            elif self._numOfCards % len(self.players) == (len(self.players) - len(self.players)-1):
-                self._lead = self.players[(len(self.players) - len(self.players))-1]
+            if self._numOfCards % len(self.players) == 0:
+                self._lead = self.players[0]
+            elif self._numOfCards % len(self.players) == 1:
+                self._lead = self.players[1]
             else:
                 raise RoundError(self, 'setLead', '2 players, cards dodgy')
         # if 3 players
         elif len(self.players) == 3:
-            if self._numOfCards % len(self.players) == (len(self.players) - len(self.players)):
-                self._lead = self.players[(len(self.players) - len(self.players))]
-            elif self._numOfCards % len(self.players) == (len(self.players) - len(self.players)-1):
-                self._lead = self.players[(len(self.players) - len(self.players))-1]
-            elif self._numOfCards % len(self.players) == (len(self.players) - len(self.players) - 2):
-                self._lead = self.players[(len(self.players) - len(self.players)) - 2]
+            if self._numOfCards % len(self.players) == 0:
+                self._lead = self.players[0]
+            elif self._numOfCards % len(self.players) == 1:
+                self._lead = self.players[1]
+            elif self._numOfCards % len(self.players) == 2:
+                self._lead = self.players[2]
             else:
                 raise RoundError(self, 'setLead', '3 players, cards dodgy')
         # if 4 players
         elif len(self.players) == 4:
-            if self._numOfCards % len(self.players) == (len(self.players) - len(self.players)):
-                self._lead = self.players[(len(self.players) - len(self.players))]
-            elif self._numOfCards % len(self.players) == (len(self.players) - len(self.players)-1):
-                self._lead = self.players[(len(self.players) - len(self.players))-1]
-            elif self._numOfCards % len(self.players) == (len(self.players) - len(self.players) - 2):
-                self._lead = self.players[(len(self.players) - len(self.players)) - 2]
-            elif self._numOfCards % len(self.players) == (len(self.players) - len(self.players) - 3):
-                self._lead = self.players[(len(self.players) - len(self.players)) - 3]
+            if self._numOfCards % len(self.players) == 0:
+                self._lead = self.players[0]
+            elif self._numOfCards % len(self.players) == 1:
+                self._lead = self.players[1]
+            elif self._numOfCards % len(self.players) == 2:
+                self._lead = self.players[2]
+            elif self._numOfCards % len(self.players) == 3:
+                self._lead = self.players[3]
             else:
                 raise RoundError(self, 'setLead', '4 players, cards dodgy')
         else:
@@ -147,6 +147,7 @@ class Round:
             # if getBets is called without bets passed into it, we must get via input()
             #ToDo change so only gather bets for those that are not placed bets already
             for player in self.players:
+
                 print(f'Playername: {player.name}')
                 print(f'Hand: {player.hand}')
                 placeholder = int(input('Bet: '))
@@ -173,22 +174,25 @@ class Round:
                 current_total += self.bets[1]
 
             temp_bets = bets[0]
-
-            # check to see if player has placed bet already
+            # process bets
             for each_bet in temp_bets:
+                # check to see if player has placed bet already
                 for player in self.players:
                     if player.name == each_bet[0]:
                         raise RoundError(self,'setBets()', 'player is trying to set bet again')
-
-            for each_bet in temp_bets:
-                #if you are the last person to place the bet you cannot put a bet that means total = num of cards
-                if len(self.bets) == len(self.players)-1:
+                # if you are the last person to place the bet you cannot put a bet that means total = num of cards
+                if len(self.bets) == len(self.players) - 1:
                     if each_bet[1] + current_total == len(self._numOfCards):
                         raise RoundError(self, player.name, 'invalid bet')
                     else:
                         self.bets.append(each_bet)
                 else:
                     self.bets.append(each_bet)
+
+
+
+
+
 
             # update state once all bets are gathered
             if len(self.bets) == len(self.players):
