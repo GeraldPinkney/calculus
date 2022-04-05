@@ -214,8 +214,8 @@ class InterfaceLayer:
                 print(f'{record[0]:>6} {record[1]:>11}    {"*" * record[1]}')
             self.round_menu()
         elif choice == 7:
-            current_round.play_next_trick()
-            self.round_menu()
+            #current_round.play_next_trick()
+            self.trick_menu()
         elif choice == 8:
             current_round.playTricks()
             self.round_menu()
@@ -230,7 +230,23 @@ class InterfaceLayer:
 
     def trick_menu(self):
         #TODO make trick menu
-        pass
+        self.last_menu = self.current_menu
+        self.current_menu = 'Trick Menu'
+        # print(f'\nCurrent Menu: {self.current_menu}, Last Menu: {self.last_menu}')
+
+        game_state = self.current_game.get_game_state()
+        current_round = self.current_game.getCurrentRound()
+        # print the current state of the round to indicate next action
+        if game_state == 0:
+            self.main_menu()
+        elif game_state == 1:
+            # cards dealt | bets gathered | tricks played | round scored | tricks setup
+            if current_round.get_round_state_detail()[0] == 0:
+                self.round_menu()
+            elif current_round.get_round_state_detail()[1] == 0:
+                self.round_menu()
+            elif current_round.get_round_state_detail()[2] == 0:
+                current_trick = current_round.get_current_trick()
 
 if __name__ == "__main__":
     InterfaceLayer()
