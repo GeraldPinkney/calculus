@@ -192,7 +192,7 @@ class InterfaceLayer:
             self.round_menu()
         elif choice == 25:
             for player in self.current_game.getPlayers():
-                player.hand.sort_hand(current_round.get_trumps())
+                player.hand.sort(current_round.get_trumps())
             self.round_menu()
         elif choice == 3:
             print(current_round.get_trumps())

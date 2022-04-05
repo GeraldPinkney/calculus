@@ -70,13 +70,32 @@ class Hand:
             # throw exception
         return card
 
+    def __index__(self, card):
+        # ToDo add testing for this
+        index = -1
+        if not self.__contains__(card):
+            raise ValueError('card not in hand')
+        else:
+            try:
+                for i in range(self.__len__()):
+                    if self._cards[i] == card:
+                        index = i
+                        break
+            except Exception:
+                raise Exception
+            else:
+                if index == -1:
+                    raise Exception
+                else:
+                    return index
+
     def __str__(self):
         return f'Hand({self._cards})'
 
     def __contains__(self, item):
         return True if item in self._cards else False
 
-    def sort_hand(self, trumps):
+    def sort(self, trumps):
         unsorted_hand = self._cards.copy()
         sorted_hand = []
         hearts_list = []
@@ -105,7 +124,7 @@ class Hand:
         bubble_sort_cards(spades_list)
 
         # sort the suit groups so trumps are on the far right, with R-B pattern for others
-        if trumps == 'hearts': # SDCH
+        if trumps == 'hearts':  # SDCH
             for card in spades_list:
                 sorted_hand.append(card)
             for card in diamonds_list:
@@ -114,7 +133,7 @@ class Hand:
                 sorted_hand.append(card)
             for card in hearts_list:
                 sorted_hand.append(card)
-        elif trumps == 'clubs': # HSDC
+        elif trumps == 'clubs':  # HSDC
             for card in hearts_list:
                 sorted_hand.append(card)
             for card in spades_list:
@@ -123,7 +142,7 @@ class Hand:
                 sorted_hand.append(card)
             for card in clubs_list:
                 sorted_hand.append(card)
-        elif trumps == 'diamonds': # CHSD
+        elif trumps == 'diamonds':  # CHSD
             for card in clubs_list:
                 sorted_hand.append(card)
             for card in hearts_list:
@@ -132,7 +151,7 @@ class Hand:
                 sorted_hand.append(card)
             for card in diamonds_list:
                 sorted_hand.append(card)
-        elif trumps == 'spades': # DCHS
+        elif trumps == 'spades':  # DCHS
             for card in diamonds_list:
                 sorted_hand.append(card)
             for card in clubs_list:

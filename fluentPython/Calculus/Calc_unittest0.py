@@ -77,19 +77,19 @@ class HandSortingTestCase(unittest.TestCase):
             player.hand.takecard(CardsUtils.Card(rank='3', suit='hearts'))
 
     def testSortHand0(self):
-        self.players[0].hand.sort_hand('spades')
+        self.players[0].hand.sort('spades')
         self.assertEqual(CardsUtils.Card(rank='2', suit='hearts'), self.players[0].hand[0])
         self.assertEqual(CardsUtils.Card(rank='3', suit='spades'), self.players[0].hand[1])
         self.assertEqual(CardsUtils.Card(rank='A', suit='spades'), self.players[0].hand[2])
 
     def testSortHand1(self):
-        self.players[1].hand.sort_hand('spades')
+        self.players[1].hand.sort('spades')
         self.assertEqual(CardsUtils.Card(rank='A', suit='diamonds'), self.players[1].hand[0])
         self.assertEqual(CardsUtils.Card(rank='4', suit='spades'), self.players[1].hand[1])
         self.assertEqual(CardsUtils.Card(rank='5', suit='spades'), self.players[1].hand[2])
 
     def testSortHand2(self):
-        self.players[2].hand.sort_hand('spades')
+        self.players[2].hand.sort('spades')
         self.assertEqual(CardsUtils.Card(rank='2', suit='hearts'), self.players[2].hand[0])
         self.assertEqual(CardsUtils.Card(rank='3', suit='hearts'), self.players[2].hand[1])
         self.assertEqual(CardsUtils.Card(rank='A', suit='hearts'), self.players[2].hand[2])
