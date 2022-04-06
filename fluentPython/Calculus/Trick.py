@@ -51,6 +51,7 @@ class Trick:
         return (playername, card)
 
     def reorder_players(self, newLead):
+        """take new lead Player object as parameter and reorder based on a ring"""
         if len(self.players) == 2:
             if self.players[0] != newLead:
                 tmp = self.players[0]
@@ -71,12 +72,36 @@ class Trick:
                     self.players[1] = tmp
 
         elif len(self.players) == 4:
-            pass
-            #ToDo will need to implement this later.
+            if self.players[0] != newLead:
+                if self.players[1] == newLead:
+                    tmp = self.players[0]
+                    self.players[0] = self.players[1]
+                    self.players[1] = self.players[2]
+                    self.players[2] = self.players[3]
+                    self.players[3] = tmp
+                elif self.players[2] == newLead:
+                    tmp = self.players[0]
+                    self.players[0] = self.players[2]
+                    self.players[2] = tmp
+                    tmp = self.players[3]
+                    self.players[3] = self.players[1]
+                    self.players[1] = tmp
+                elif self.players[3] == newLead:
+                    tmp = self.players[3]
+                    self.players[3] = self.players[2]
+                    self.players[2] = self.players[1]
+                    self.players[1] = self.players[0]
+                    self.players[0] = tmp
+                else:
+                    raise Exception()
         else:
-            pass
+            raise Exception()
 
     def calcWinner(self):
+        """calculate who won that trick by comparing cards.
+        Update the trick to be completed
+        reorder the players"""
+
         # set the temp winner as the card play by lead
         tempwinner1 = self._cards_played[0]
         tempwinner = tempwinner1[1]
@@ -107,6 +132,7 @@ class Trick:
         return returned
 
     def playTrick(self, *played):
+        """only use this for text UI testing"""
     # ToDo work out how to actually call this properly rather than having to call input()
         if len(played) == 0:
             for num in range(len(self.players)):

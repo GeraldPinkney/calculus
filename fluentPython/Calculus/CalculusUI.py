@@ -3,6 +3,7 @@
 
 import logging
 import fluentPython.Calculus
+from fluentPython.Calculus.CardsUtils import valid_card
 from fluentPython.Calculus.CalculusExceptions import RoundError
 from fluentPython.Calculus.FrenchDeck import FrenchDeck
 from fluentPython.Calculus.Game import Game
@@ -236,17 +237,64 @@ class InterfaceLayer:
 
         game_state = self.current_game.get_game_state()
         current_round = self.current_game.getCurrentRound()
+        current_trick = current_round.get_current_trick()
         # print the current state of the round to indicate next action
         if game_state == 0:
             self.main_menu()
         elif game_state == 1:
             # cards dealt | bets gathered | tricks played | round scored | tricks setup
             if current_round.get_round_state_detail()[0] == 0:
+                # means cards are not dealt. go to round menu
                 self.round_menu()
             elif current_round.get_round_state_detail()[1] == 0:
+                # means bets not gathered. go to round menu
                 self.round_menu()
             elif current_round.get_round_state_detail()[2] == 0:
-                current_trick = current_round.get_current_trick()
+                # can proceed as tricks not played. Now show valid options
+
+                print(
+                    f'select options: \n\t2-Show Hand\t25-Sort Hand\t3-Show Trumps\t7-Play Card\t\n'
+                    f'9-Last Menu\t10-Main Menu\t1-Exit\t4-Show Round Detail')
+                choice = int(input('Enter option number: '))
+                if choice == 0:
+                    pass
+                elif choice == 2:
+                    # current_round.showHand()
+                    hands = current_round.getHand()
+                    for each_hand in hands:
+                        print(f'player: {each_hand[0]}')
+                        print_sorted_hand(each_hand[1], each_hand[2])
+                        print('\n')
+
+                    self.trick_menu()
+                elif choice == 25:
+                    for player in self.current_game.getPlayers():
+                        player.hand.sort(current_round.get_trumps())
+                    self.trick_menu()
+                elif choice == 3:
+                    print(current_round.get_trumps())
+                    self.trick_menu()
+                elif choice == 4:
+                    print(current_round)
+                    self.trick_menu()
+                elif choice == 7:
+                    for num in range(len(current_trick.players)):
+                        card_index = -1
+                        v_valid_card = False
+                        print(f'{current_trick.players[num].name}\'s turn.\n {current_trick.players[num].hand}')
+                        # ToDo change how this works so it throws an exception if invalid card, but catches it and handles it
+                        # while (card_index < 0 or card_index > len(self.players[num].hand) and not v_valid_card):
+                        while not v_valid_card:
+                            card_index = int(input(f'provide index of card, 0 to {len(current_trick.players[num].hand) - 1}: '))
+                            # check if choice is valid
+                            v_valid_card = valid_card(current_trick._trumps, current_trick.get_trumps_broken(), current_trick.players[num],
+                                                      current_trick.players[num].hand._cards[card_index], current_trick._cards_played)
+
+                        # play card
+                        current_trick.playCard(current_trick.players[num].name,
+                                      current_trick.players[num].hand.playcard(current_trick.players[num].hand._cards[card_index]))
+                    current_trick.calcWinner()
+                    self.round_menu()
 
 if __name__ == "__main__":
     InterfaceLayer()

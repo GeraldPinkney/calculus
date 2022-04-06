@@ -326,11 +326,11 @@ class Round:
                             # if this is the last trick of the round, set state of tricks played to Y
                             self._state[2] = 1
                         break
-                elif num == 0:
-                    current_trick = self._tricks[num]
-                    # reorder if its the first trick to match lead
-                    current_trick.reorder_players(self._lead)
-                    break
+                    elif num == 0:
+                        current_trick = self._tricks[num]
+                        # reorder if its the first trick to match lead
+                        current_trick.reorder_players(self._lead)
+                        break
             current_trick.playTrick()
             self.updateActual(current_trick.getWinner())
 
@@ -340,12 +340,37 @@ class Round:
         return 0
 
     def get_current_trick(self):
-        if self._state[3] == 1:
-            return None
+        if self._state[0] == 0:    #  self._state = [0,0,0,0]    # cards dealt | bets gathered | tricks played | round scored
+            raise RoundError(self, 'play_next_trick()', 'Cards not dealt')
+        elif self._state[1] == 0:
+            raise RoundError(self, 'play_next_trick()', 'Bets not gathered')
+        elif self._state[3] == 1:
+            #self.internal_score_round()
+            raise RoundError(self, 'play_next_trick()', 'Round Scored')
+        elif self._state[4] == 0:
+            raise RoundError(self, 'play_next_trick()', 'tricks not setup')
         else:
-            current_trick = self._tricks[0]
             for num in range(len(self._tricks)):
-                current_trick = self._tricks[num]
+
+                if self._tricks[num]._completed == False:
+                    #
+                    current_trick = self._tricks[num]
+                    if num > 0 and self._tricks[num-1]._completed == True:
+                        # set the trumps broken property from the last trick
+                        prior_trick_broken = self._tricks[num-1].get_trumps_broken()
+                        current_trick.set_trumps_broken(prior_trick_broken)
+                        if num+1 == len(self._tricks):
+                            # if this is the last trick of the round, set state of tricks played to Y
+                            self._state[2] = 1
+                        break
+                    elif num == 0:
+                        current_trick = self._tricks[num]
+                        # reorder if its the first trick to match lead
+                        current_trick.reorder_players(self._lead)
+                        break
+            self.updateActual(current_trick.getWinner())
+            return current_trick
+
 
     def get_round_state(self):
         """"""
