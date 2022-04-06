@@ -5,6 +5,7 @@ from fluentPython.Calculus.CardsUtils import compare_cards
 
 
 def bubble_sort_cards(cards):
+    """returns a bool to indicate if its sorted."""
     swapped = True
     if len(cards) == 0:
         swapped = False
@@ -39,6 +40,7 @@ class Hand():
         return len(self._cards)
 
     def takecard(self, card):
+        """ append the card to the internally maintained cardlist and increment the count of suits"""
         self._cards.append(card)
         if card[1] == 'hearts':
             self._num_of_hearts += 1
@@ -56,6 +58,8 @@ class Hand():
         return self._cards[position]
 
     def playcard(self, card):
+        """remove the card to the internally maintained cardlist and decrement the count of suits. Returns card."""
+        #
         self._cards.remove(card)
         if card[1] == 'hearts':
             self._num_of_hearts -= 1
@@ -103,6 +107,9 @@ class Hand():
         return True if item in self._cards else False
 
     def sort(self, trumps):
+        """takes trumps as a parameter
+        sorts the current hand & returns a sorted hand
+        """
         unsorted_hand = self._cards.copy()
         sorted_hand = []
         hearts_list = []
