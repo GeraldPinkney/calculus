@@ -26,7 +26,7 @@ def bubble_sort_cards(cards):
     return not swapped
 
 
-class Hand:
+class Hand():
 
     def __init__(self):
         self._cards = []
@@ -49,7 +49,7 @@ class Hand:
         elif card[1] == 'spades':
             self._num_of_spades += 1
         else:
-            pass
+            raise AttributeError()
             # throw exception
 
     def __getitem__(self, position):
@@ -70,11 +70,15 @@ class Hand:
             # throw exception
         return card
 
+    def index(self, card):
+        return self.__index__(card)
+
     def __index__(self, card):
-        # ToDo add testing for this
+        """returns integer index of first instance of the card"""
+        # add checking for if parameter is a Card if type(card)
         index = -1
         if not self.__contains__(card):
-            raise ValueError('card not in hand')
+            raise ValueError(f'{card} is not in hand')
         else:
             try:
                 for i in range(self.__len__()):
@@ -88,6 +92,9 @@ class Hand:
                     raise Exception
                 else:
                     return index
+
+    def indexOf(self, card):
+        return self.__index__(card)
 
     def __str__(self):
         return f'Hand({self._cards})'

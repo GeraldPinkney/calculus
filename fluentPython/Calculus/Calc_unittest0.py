@@ -1,5 +1,5 @@
 import unittest
-from fluentPython.Calculus import FrenchDeck, CardsUtils, Player, Round, Trick, Game
+from fluentPython.Calculus import FrenchDeck, CardsUtils, Player, Round, Trick, Game, Hand
 from fluentPython.Calculus.CalculusExceptions import StateError, RoundError
 
 
@@ -423,6 +423,14 @@ class ValidCardTestCase(unittest.TestCase):
             player.hand.takecard(CardsUtils.Card(rank='A', suit='hearts'))
             player.hand.takecard(CardsUtils.Card(rank='2', suit='hearts'))
             player.hand.takecard(CardsUtils.Card(rank='5', suit='hearts'))
+
+    def testHandIndex0(self):
+        value = self.players[0].hand.index(CardsUtils.Card(rank='A', suit='spades'))
+        self.assertEqual(0, value)
+
+    def testHandIndex1(self):
+        value = self.players[0].hand.index(CardsUtils.Card(rank='2', suit='hearts'))
+        self.assertEqual(1, value)
 
     def testValidCard0(self):
         # trumps broken, can lead with non-trump
