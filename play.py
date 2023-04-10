@@ -15,7 +15,7 @@ if __name__ == '__main__':
     current_round.deal()
     current_round.showHand()
     current_round.get_trumps()
-    current_round.getBets()
+    current_round.setBets()
     current_round.playTricks()
     current_round.show_actual()
     #newGame.playRounds()

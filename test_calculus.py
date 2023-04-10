@@ -216,14 +216,14 @@ class RoundTestCase(unittest.TestCase):
         # test passing in bets into the getBets method
         round1 = Calculus.Round(9, self.deck, self.players)
         input_bets = [('Gerald', 1), ('Ruth', 2), ('Patrick', 3)]
-        round1.getBets(input_bets)
+        round1.setBets(input_bets)
         self.assertEqual([('Gerald', 1), ('Ruth', 2), ('Patrick', 3)],round1.bets)
 
     def testgetBets2(self):
         # test not passing in bets. then use UI to enter
         round1 = Calculus.Round(9, self.deck, self.players)
         print('Gerald-1, Ruth-2, Patrick-3')
-        round1.getBets()
+        round1.setBets()
         self.assertEqual([('Gerald', 1), ('Ruth', 2), ('Patrick', 3)], round1.bets)
 
     def testRoundDeal0(self):
@@ -248,7 +248,7 @@ class RoundTestCase(unittest.TestCase):
         # test if bet matches actual
         round1 = Calculus.Round(9, self.deck, self.players)
         input_bets = [('Gerald', 1), ('Ruth', 2), ('Patrick', 0)]
-        round1.getBets(input_bets)
+        round1.setBets(input_bets)
         round1.updateActual('Gerald')
         round1.updateActual('Ruth')
         round1.updateActual('Ruth')
@@ -260,7 +260,7 @@ class RoundTestCase(unittest.TestCase):
         # test if bet does not match actual
         round1 = Calculus.Round(9, self.deck, self.players)
         input_bets = [('Gerald', 1), ('Ruth', 2), ('Patrick', 0)]
-        round1.getBets(input_bets)
+        round1.setBets(input_bets)
         round1.updateActual('Patrick')
         round1.updateActual('Patrick')
         round1.updateActual('Patrick')
@@ -349,7 +349,7 @@ class FrenchDeckTestCase(unittest.TestCase):
 
 
 class ValidCardTestCase(unittest.TestCase):
-    #valid_card(trumps, trumps_broken, player, card, *played)
+    #valid_card(trumps, _trumps_broken, player, card, *played)
     # you cannot lead with a trump unless trumps are broken
     # you have to follow suit if you can
     # if you cannot follow suit, you can play any card
